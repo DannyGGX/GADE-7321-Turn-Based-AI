@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c42b7fb0a8d15e4b83ab58b874b1850, type: 3}
+  m_Name: Game Setup Data
+  m_EditorClassIdentifier: 
+  tileFactory: {fileID: 11400000, guid: 04d212b419612c24baaf13ce1ce898fd, type: 2}
+  centerPosition: {x: 0, y: 0, z: 0}
+  frameWidth: 10
+  frameHeight: 10
+  margin: 0.1
