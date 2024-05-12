@@ -1,22 +1,17 @@
-using UnityEngine;
 
+using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace DannyG
 {
 	
-	public class ValidMovesData : MonoBehaviour
+	public struct ValidMovesData
 	{
+		public List<Coordinate> List;
 		
-		
-		private void OnEnable()
+		public ValidMovesData(List<Coordinate> list)
 		{
-			
+			List = list;
 		}
-		private void OnDisable()
-		{
-			
-		}
-		
-		
 	}
 }

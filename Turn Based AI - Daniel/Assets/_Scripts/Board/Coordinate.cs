@@ -6,7 +6,7 @@ namespace DannyG
     {
         public int x;
         public int y;
-        public Coordinate(int x, int y)
+        public Coordinate(int x = -1, int y = -1)
         {
             this.x = x;
             this.y = y;
@@ -40,6 +40,14 @@ namespace DannyG
     }
     public static class CoordinateExtension
     {
-        
+        public static bool IsNull(this Coordinate coordinate)
+        {
+            return coordinate is { x: -1, y: -1 };
+        }
+        public static void ToNull(this Coordinate coordinate)
+        {
+            coordinate.x = -1;
+            coordinate.y = -1;
+        }
     }
 }

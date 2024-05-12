@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DannyG;
 using UnityEngine;
 
 /// <summary>
@@ -12,5 +13,16 @@ using UnityEngine;
 /// </summary>
 public static class EventManager
 {
-    public static Event<bool> OnGamePaused { get; } = new (); // bool: true if game is paused
+    public static Event<bool> onGamePaused { get; } = new (); // bool: true if game is paused
+    
+    public static Event<PlayerId> onTurnStart { get; } = new ();
+    public static Event<ValidMovesData> onDeterminedValidMoves { get; } = new ();
+    public static Event<MoveData> onPlacePiece { get; } = new ();
+    public static Event onBoardDisplayFinishedUpdating { get; } = new ();
+    
+    public static Event onGravityShift { get; } = new ();
+    public static Event<ShiftedTilesData> onApplyGravityShiftToDisplay { get; } = new ();
+    
+    public static Event onDrawGame { get; } = new ();
+    public static Event<PlayerId> onPlayerWin { get; } = new ();
 }

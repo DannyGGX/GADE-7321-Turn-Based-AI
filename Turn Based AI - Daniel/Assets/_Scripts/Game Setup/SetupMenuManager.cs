@@ -18,7 +18,7 @@ namespace DannyG
 		{
 			_mapPresets = Resources.Load<MapPresetsSO>("Map Presets");
 			_mapPresets.Init();
-			//CreateGameSetupData(); // Called from level manager for testing purposes
+			//CreateGameSetupData(); // Called from level manager for testing purposes, because level manager also calls from Awake
 		}
 		public void CreateGameSetupData() // change to private later
 		{
@@ -26,6 +26,8 @@ namespace DannyG
 
 			gameSetupData.startingGrid = _mapPresets.ChooseRandomMap();
 			gameSetupData.SelectRandomStartingPlayer();
+			gameSetupData.player1Type = PlayerType.Human;
+			gameSetupData.player2Type = PlayerType.Human;
 		}
 		
 		

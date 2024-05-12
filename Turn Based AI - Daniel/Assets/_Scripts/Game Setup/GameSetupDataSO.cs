@@ -8,7 +8,10 @@ namespace DannyG
 	[CreateAssetMenu(fileName = "Game Setup Data", menuName = "Scriptable Object/Game Setup Data", order = 1)]
 	public class GameSetupDataSO : ScriptableObject
 	{
+		// Player data
 		public PlayerId startingPlayer { get; set; }
+		public PlayerType player1Type { get; set; }
+		public PlayerType player2Type { get; set; }
 		
 		// Board data
 		public int[,] startingGrid { get; set; }
