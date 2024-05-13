@@ -1,3 +1,5 @@
+using System;
+
 namespace DannyG
 {
     public struct MoveData
@@ -9,6 +11,19 @@ namespace DannyG
         {
             Coordinate = coordinate;
             PlayerId = playerId;
+        }
+        
+        public static TileType ConvertToTileType(PlayerId playerId)
+        {
+            switch (playerId)
+            {
+                case PlayerId.Player1:
+                    return TileType.Player1Token;
+                case PlayerId.Player2:
+                    return TileType.Player2Token;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(playerId), playerId, null);
+            }
         }
     }
 }

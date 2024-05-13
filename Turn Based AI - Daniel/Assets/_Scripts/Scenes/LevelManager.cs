@@ -9,6 +9,7 @@ namespace DannyG._Scripts.Scenes
             base.Awake();
             SetupMenuManager.Instance.CreateGameSetupData();
             SetupDataLocator.Init();
+            GravityManager.Init();
         }
     }
 }

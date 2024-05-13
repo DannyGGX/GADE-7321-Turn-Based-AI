@@ -21,7 +21,7 @@ public static class EventManager
     public static Event onBoardDisplayFinishedUpdating { get; } = new ();
     
     public static Event onGravityShift { get; } = new ();
-    public static Event<ShiftedTilesData> onApplyGravityShiftToDisplay { get; } = new ();
+    public static Event<AllShiftedTilesData> onApplyGravityShiftToDisplay { get; } = new ();
     
     public static Event onDrawGame { get; } = new ();
     public static Event<PlayerId> onPlayerWin { get; } = new ();

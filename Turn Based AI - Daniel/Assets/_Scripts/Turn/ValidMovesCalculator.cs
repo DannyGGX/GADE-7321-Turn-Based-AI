@@ -74,7 +74,7 @@ namespace DannyG
 			
 			int incrementor = inReverseLoop ? -1 : 1;
 			int targetDimensionStart = inReverseLoop ? targetDimensionLength - 1 : 0;
-			int targetDimensionEnd = inReverseLoop ? 0 : targetDimensionLength;
+			int targetDimensionEnd = inReverseLoop ? 0 : targetDimensionLength - 1;
 			
 			
 			for (int otherDimensionIndex = 0; otherDimensionIndex < otherDimensionLength; otherDimensionIndex++)

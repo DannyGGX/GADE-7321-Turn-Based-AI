@@ -10,11 +10,17 @@ namespace DannyG
 
         private Coordinate _coordinate;
 
-        public void Initialize(Action<Coordinate> action)
+        public void Initialize(Action<Coordinate> buttonCallback)
         {
-            button.onClick.AddListener(() => action(_coordinate));
+            button.onClick.AddListener(() => ButtonClicked(buttonCallback));
 
             SetEnableState(false);
+        }
+
+        private void ButtonClicked(Action<Coordinate> buttonCallback)
+        {
+            buttonCallback.Invoke(_coordinate);
+            this.Log("Button Clicked");
         }
         
         

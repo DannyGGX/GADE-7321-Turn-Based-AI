@@ -16,7 +16,7 @@ namespace DannyG
 		
 		public static void NextGravityState()
 		{
-			//currentGravityState = currentGravityState.Next();
+			currentGravityState = (GravityStates)currentGravityState.Next();
 		}
 	}
 }
