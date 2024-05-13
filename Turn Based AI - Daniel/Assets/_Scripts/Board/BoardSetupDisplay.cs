@@ -11,23 +11,22 @@ namespace DannyG
 	/// </summary>
 	public class BoardSetupDisplay : MonoBehaviour
 	{
-		private GameSetupDataSO _gameSetupData;
 		private void OnEnable()
 		{
-			_gameSetupData = SetupDataLocator.GameSetupData;
 			CreateEmptyTilesAndStartingBlockers();
 		}
 
 		private void CreateEmptyTilesAndStartingBlockers()
 		{
-			TileDisplayFactorySO tileFactory = _gameSetupData.tileFactory;
+			GameSetupDataSO gameSetupData = SetupDataLocator.GameSetupData;
+			TileDisplayFactorySO tileFactory = gameSetupData.tileFactory;
 			
-			for (int y = 0; y < _gameSetupData.startingGrid.GetLength(1); y++)
+			for (int y = 0; y < gameSetupData.startingGrid.GetLength(1); y++)
 			{
-				for (int x = 0; x < _gameSetupData.startingGrid.GetLength(0); x++)
+				for (int x = 0; x < gameSetupData.startingGrid.GetLength(0); x++)
 				{
 					tileFactory.CreateTile(TileType.Empty, x, y);
-					if (_gameSetupData.startingGrid[x, y] == (int)TileType.Blocker)
+					if (gameSetupData.startingGrid[x, y] == (int)TileType.Blocker)
 					{
 						tileFactory.CreateTile(TileType.Blocker, x , y, transform);
 					}

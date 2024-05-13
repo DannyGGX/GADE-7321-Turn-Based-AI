@@ -42,6 +42,7 @@ namespace DannyG
 		
 		private void StartTurn(PlayerId playerId)
 		{
+			Debug.Log("Player manager received start turn event: " + playerId);
 			switch (playerId)
 			{
 				case PlayerId.Player1:

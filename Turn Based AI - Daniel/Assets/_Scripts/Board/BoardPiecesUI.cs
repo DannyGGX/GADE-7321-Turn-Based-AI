@@ -18,11 +18,14 @@ namespace DannyG
 			EventManager.onPlacePiece.Subscribe(CreatePiece);
 			EventManager.onApplyGravityShiftToDisplay.Subscribe(ShiftPieces);
 
+			
+		}
+
+		private void Start()
+		{
 			_gameSetupData = SetupDataLocator.GameSetupData;
 			_tileDisplayFactory = _gameSetupData.tileFactory;
 		}
-
-		
 
 
 		private void OnDisable()
