@@ -15,14 +15,15 @@ public static class EventManager
 {
     public static Event<bool> onGamePaused { get; } = new (); // bool: true if game is paused
     
-    public static Event<PlayerId> onTurnStart { get; } = new ();
+    public static Event<PlayerId> onTurnStart { get; } = new ("OnTurnStart");
+    
     public static Event<ValidMovesData> onDeterminedValidMoves { get; } = new ();
-    public static Event<MoveData> onPlacePiece { get; } = new ();
-    public static Event onBoardDisplayFinishedUpdating { get; } = new ();
+    public static Event<MoveData> onPlacePiece { get; } = new ("OnPlacePiece");
+    public static Event onBoardDisplayFinishedUpdating { get; } = new ("OnBoardDisplayFinishedUpdating");
     
-    public static Event onGravityShift { get; } = new ();
-    public static Event<AllShiftedTilesData> onApplyGravityShiftToDisplay { get; } = new ();
+    public static Event onGravityShift { get; } = new ("OnGravityShift");
+    public static Event<AllShiftedTilesData> onApplyGravityShiftToDisplay { get; } = new ("OnApplyGravityShiftToDisplay");
     
-    public static Event onDrawGame { get; } = new ();
-    public static Event<PlayerId> onPlayerWin { get; } = new ();
+    public static Event onDrawGame { get; } = new ("OnDrawGame");
+    public static Event<PlayerId> onPlayerWin { get; } = new ("OnPlayerWin");
 }

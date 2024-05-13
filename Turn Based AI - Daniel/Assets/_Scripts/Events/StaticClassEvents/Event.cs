@@ -8,10 +8,19 @@ using UnityEngine.Events;
 public class Event
 {
     private event Action _event = delegate {  };
+    private string _logMessage = null;
 
+    public Event(string logMessage = null)
+    {
+        _logMessage = logMessage;
+    }
     public void Invoke()
     {
         _event?.Invoke();
+        if (_logMessage != null)
+        {
+            Debug.Log($"Event invoked: {_logMessage}");
+        }
     }
     
     /// <summary>
@@ -28,6 +37,11 @@ public class Event
     {
         _event -= listener;
     }
+
+    public void AddInvokeLog(string message)
+    {
+        _logMessage = message;
+    }
 }
 
 /// <summary>
@@ -37,10 +51,19 @@ public class Event
 public class Event<T>
 {
     private event Action<T> _event = delegate{  };
-
+    private string _logMessage = null;
+    
+    public Event(string logMessage = null)
+    {
+        _logMessage = logMessage;
+    }
     public void Invoke(T parameter)
     {
         _event?.Invoke(parameter);
+        if (_logMessage != null)
+        {
+            Debug.Log($"Event invoked: {_logMessage}\nParameter: {parameter}");
+        }
     }
     
     public void Subscribe(Action<T> listener)
@@ -53,14 +76,29 @@ public class Event<T>
     {
         _event -= listener;
     }
+    
+    public void AddInvokeLog(string message)
+    {
+        _logMessage = message;
+    }
 }
 
 public class Event<T1, T2>
 {
     private event Action<T1, T2> _event = delegate {  };
+    private string _logMessage = null;
+    
+    public Event(string logMessage = null)
+    {
+        _logMessage = logMessage;
+    }
     public void Invoke(T1 parameter1, T2 parameter2)
     {
         _event?.Invoke(parameter1, parameter2);
+        if (_logMessage != null)
+        {
+            Debug.Log($"Event invoked: {_logMessage}\nParameters: {parameter1}, {parameter2}");
+        }
     }
 
     public void Subscribe(Action<T1, T2> listener)
@@ -72,5 +110,10 @@ public class Event<T1, T2>
     public void Unsubscribe(Action<T1, T2> listener)
     {
         _event -= listener;
+    }
+    
+    public void AddInvokeLog(string message)
+    {
+        _logMessage = message;
     }
 }
