@@ -34,6 +34,11 @@ namespace DannyG
 			return validMoves;
 		}
 
+		/// <summary>
+		/// This is the more basic, but less repeatable version of the below function.
+		/// This one can be used to more easily understand the below function.
+		/// </summary>
+		/// <param name="validMoves"></param>
 		private void ForEachColumnOrderedTopToBottom(out List<Coordinate> validMoves)
 		{
 			int[,] grid = BoardStateManager.Instance.grid;
@@ -62,80 +67,70 @@ namespace DannyG
 			}
 		}
 
+		private delegate bool LoopEndCondition(int index);
+		
 		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
 			var grid = BoardStateManager.Instance.grid;
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
+
+			int otherDimensionIndex = default;
+			int targetDimensionIndex = default;
 			
+			// set dimension variables
 			var targetDimension = inXDimension ? 0 : 1;
+			int ReachEndLoopAddition = inReverseLoop ? 1 : -1;
 			var targetDimensionLength = inXDimension ? grid.GetLength(0) : grid.GetLength(1);
 			var otherDimensionLength = inXDimension ? grid.GetLength(1) : grid.GetLength(0);
+			Action setCurrentValidMove = inXDimension ? SetCurrentValidMoveForXTargetDimension : SetCurrentValidMoveForYTargetDimension;
 			
+			// set loop direction variables
 			int incrementor = inReverseLoop ? -1 : 1;
-			int targetDimensionStart = inReverseLoop ? targetDimensionLength - 1 : 0;
-			int targetDimensionEnd = inReverseLoop ? 0 : targetDimensionLength - 1;
-			
-			
-			for (int otherDimensionIndex = 0; otherDimensionIndex < otherDimensionLength; otherDimensionIndex++)
+			int targetDimensionStartIndex = inReverseLoop ? targetDimensionLength - 1 : 0;
+			int targetDimensionEndIndex = inReverseLoop ? 0 : targetDimensionLength - 1;
+			LoopEndCondition endCondition = inReverseLoop ? ReverseLoopEndCondition : ForwardLoopEndCondition;
+
+			// loop normally through the non-target dimension
+			for (otherDimensionIndex = 0; otherDimensionIndex < otherDimensionLength; otherDimensionIndex++)
 			{
-				int targetDimensionIndex = targetDimensionStart;
-				
-				if (inReverseLoop) // the only difference in these if else statements is the check for end of loops
+				targetDimensionIndex = targetDimensionStartIndex;
+				// if first cell is not empty, loop until an empty cell is found
+				while (endCondition(targetDimensionIndex) && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
 				{
-					// if first cell is a blocker	// skip to last blocker in a line
-					while (targetDimensionIndex > targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
-					{
-						targetDimensionIndex += incrementor;
-					}
-					if (targetDimensionIndex == targetDimensionEnd) continue; // if there are no empty tiles
-				
-					// look for last empty tile in a line
-					while (targetDimensionIndex >= targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
-					{
-						if (targetDimension == targetDimensionEnd)
-						{
-							currentValidMove.x = targetDimensionIndex;
-							currentValidMove.y = otherDimensionIndex;
-						}
-						else
-						{
-							currentValidMove.x = otherDimensionIndex;
-							currentValidMove.y = targetDimensionIndex;
-						}
-
-						targetDimensionIndex += incrementor;
-					}
+					targetDimensionIndex += incrementor;
 				}
-				else
+				
+				// if there are no empty tiles in the row or column
+				if (targetDimensionIndex == targetDimensionEndIndex) continue; 
+			
+				// once the first empty tile is found, loop until the current cell is not an empty tile
+				while (endCondition(targetDimensionIndex + ReachEndLoopAddition) && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
+					                                        //^ +1 or -1 so that operator in endCondition can work like >= or <=
 				{
-					// if first cell is a blocker	// skip to last blocker in a line
-					while (targetDimensionIndex < targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
-					{
-						targetDimensionIndex += incrementor;
-					}
-					if (targetDimensionIndex == targetDimensionEnd) continue; // if there are no empty tiles
-				
-					// look for last empty tile in a line
-					while (targetDimensionIndex <= targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
-					{
-						if (targetDimension == targetDimensionEnd)
-						{
-							currentValidMove.x = targetDimensionIndex;
-							currentValidMove.y = otherDimensionIndex;
-						}
-						else
-						{
-							currentValidMove.x = otherDimensionIndex;
-							currentValidMove.y = targetDimensionIndex;
-						}
-
-						targetDimensionIndex += incrementor;
-					}
+					// save the coordinates for the empty tile before incrementing to the next cell
+					setCurrentValidMove.Invoke();
+					targetDimensionIndex += incrementor;
 				}
+				
 				validMoves.Add(currentValidMove);
 			}
 			return validMoves;
+
+			bool ForwardLoopEndCondition(int index) => index < targetDimensionEndIndex;
+			bool ReverseLoopEndCondition(int index) => index > targetDimensionEndIndex;
+
+			void SetCurrentValidMoveForXTargetDimension()
+			{
+				currentValidMove.x = targetDimensionIndex;
+				currentValidMove.y = otherDimensionIndex;
+			}
+
+			void SetCurrentValidMoveForYTargetDimension()
+			{
+				currentValidMove.x = otherDimensionIndex;
+				currentValidMove.y = targetDimensionIndex;
+			}
 		}
 		
 	}
