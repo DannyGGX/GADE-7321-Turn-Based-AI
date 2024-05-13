@@ -9,23 +9,24 @@ namespace DannyG
 	public class ValidMovesCalculator
 	{
 
-		public List<Coordinate> CalculateValidMoves()
+		public List<Coordinate> GetValidMoves()
 		{
 			List<Coordinate> validMoves;
 			
 			switch (GravityManager.currentGravityState)
 			{
 				case GravityStates.Down:
-					ForEachColumnOrderedTopToBottom(out validMoves);
+					validMoves = CalculateValidMoves(false, true);
+					//ForEachColumnOrderedTopToBottom(out validMoves); // older implementation. It worked, but wasn't adaptable.
 					break;
 				case GravityStates.Right:
-					ForEachRowOrderedLeftToRight(out validMoves);
+					validMoves = CalculateValidMoves(true, false);
 					break;
 				case GravityStates.Up:
-					ForEachColumnOrderedBottomToTop(out validMoves);
+					validMoves = CalculateValidMoves(false, false);
 					break;
 				case GravityStates.Left:
-					ForEachRowOrderedRightToLeft(out validMoves);
+					validMoves = CalculateValidMoves(true, true);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -37,128 +38,105 @@ namespace DannyG
 		{
 			int[,] grid = BoardStateManager.Instance.grid;
 
-			bool noMoreBlockersBlockingEdge = false;
-			Coordinate validMove = new Coordinate();
 			validMoves = new List<Coordinate>();
+			var currentValidMove = new Coordinate();
 
 			for (int x = 0; x < grid.GetLength(0); x++)
 			{
-				for (int y = grid.GetLength(1) - 1; y >= 0; y--)
+				int y = grid.GetLength(1) - 1;
+				// if first cell is a blocker	// skip to last blocker in a line
+				while (y > 0 && grid[x, y] != (int)TileType.Empty)
 				{
-					if (grid[x, y] == (int)TileType.Empty || noMoreBlockersBlockingEdge)
-					{
-						noMoreBlockersBlockingEdge = true;
-
-						if (grid[x, y] == (int)TileType.Empty)
-						{
-							validMove.x = x;
-							validMove.y = y;
-						}
-						else if (grid[x, y] != (int)TileType.Empty && validMove.IsNull() == false)
-						{
-							validMoves.Add(validMove);
-							break;
-						}
-					}
+					y--;
 				}
-			}
-		}
-
-		private void ForEachRowOrderedLeftToRight(out List<Coordinate> validMoves)
-		{
-			int[,] grid = BoardStateManager.Instance.grid;
-
-			validMoves = new List<Coordinate>();
-
-			for (int y = 0; y < grid.GetLength(1); y++)
-			{
-				bool noMoreBlockersBlockingEdge = false;
-				Coordinate validMove = new Coordinate();
+				if (y == 0) continue; // if there are no empty tiles
 				
-				for (int x = 0; x < grid.GetLength(0); x++)
+				// look for last empty tile in a line
+				while (y >= 0 && grid[x, y] == (int)TileType.Empty)
 				{
-					if (grid[x, y] == (int)TileType.Empty || noMoreBlockersBlockingEdge)
-					{
-						noMoreBlockersBlockingEdge = true;
-
-						if (grid[x, y] == (int)TileType.Empty)
-						{
-							validMove.x = x;
-							validMove.y = y;
-						}
-						else if (grid[x, y] != (int)TileType.Empty && validMove.IsNull() == false)
-						{
-							validMoves.Add(validMove);
-							break;
-						}
-					}
+					currentValidMove.x = x;
+					currentValidMove.y = y;
+					y--;
 				}
+				validMoves.Add(currentValidMove);
 			}
 		}
 
-		private void ForEachColumnOrderedBottomToTop(out List<Coordinate> validMoves)
+		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
-			int[,] grid = BoardStateManager.Instance.grid;
-
-			validMoves = new List<Coordinate>();
-
-			for (int x = 0; x < grid.GetLength(0); x++)
+			var grid = BoardStateManager.Instance.grid;
+			var validMoves = new List<Coordinate>();
+			var currentValidMove = new Coordinate();
+			
+			var targetDimension = inXDimension ? 0 : 1;
+			var targetDimensionLength = inXDimension ? grid.GetLength(0) : grid.GetLength(1);
+			var otherDimensionLength = inXDimension ? grid.GetLength(1) : grid.GetLength(0);
+			
+			int incrementor = inReverseLoop ? -1 : 1;
+			int targetDimensionStart = inReverseLoop ? targetDimensionLength - 1 : 0;
+			int targetDimensionEnd = inReverseLoop ? 0 : targetDimensionLength;
+			
+			
+			for (int otherDimensionIndex = 0; otherDimensionIndex < otherDimensionLength; otherDimensionIndex++)
 			{
-				bool noMoreBlockersBlockingEdge = false;
-				Coordinate validMove = new Coordinate();
-
-				for (int y = 0; y < grid.GetLength(1); y++)
+				int targetDimensionIndex = targetDimensionStart;
+				
+				if (inReverseLoop) // the only difference in these if else statements is the check for end of loops
 				{
-					if (grid[x, y] == (int)TileType.Empty || noMoreBlockersBlockingEdge)
+					// if first cell is a blocker	// skip to last blocker in a line
+					while (targetDimensionIndex > targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
 					{
-						noMoreBlockersBlockingEdge = true;
+						targetDimensionIndex += incrementor;
+					}
+					if (targetDimensionIndex == targetDimensionEnd) continue; // if there are no empty tiles
+				
+					// look for last empty tile in a line
+					while (targetDimensionIndex >= targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
+					{
+						if (targetDimension == targetDimensionEnd)
+						{
+							currentValidMove.x = targetDimensionIndex;
+							currentValidMove.y = otherDimensionIndex;
+						}
+						else
+						{
+							currentValidMove.x = otherDimensionIndex;
+							currentValidMove.y = targetDimensionIndex;
+						}
 
-						if (grid[x, y] == (int)TileType.Empty)
-						{
-							validMove.x = x;
-							validMove.y = y;
-						}
-						else if (grid[x, y] != (int)TileType.Empty && validMove.IsNull() == false)
-						{
-							validMoves.Add(validMove);
-							break;
-						}
+						targetDimensionIndex += incrementor;
 					}
 				}
-			}
-
-		}
-
-		private void ForEachRowOrderedRightToLeft(out List<Coordinate> validMoves)
-		{
-			int[,] grid = BoardStateManager.Instance.grid;
-
-			validMoves = new List<Coordinate>();
-
-			for (int y = 0; y < grid.GetLength(1); y++)
-			{
-				bool noMoreBlockersBlockingEdge = false;
-				Coordinate validMove = new Coordinate();
-
-				for (int x = grid.GetLength(0) - 1; x >= 0; x--)
+				else
 				{
-					if (grid[x, y] == (int)TileType.Empty || noMoreBlockersBlockingEdge)
+					// if first cell is a blocker	// skip to last blocker in a line
+					while (targetDimensionIndex < targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
 					{
-						noMoreBlockersBlockingEdge = true;
+						targetDimensionIndex += incrementor;
+					}
+					if (targetDimensionIndex == targetDimensionEnd) continue; // if there are no empty tiles
+				
+					// look for last empty tile in a line
+					while (targetDimensionIndex <= targetDimensionEnd && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
+					{
+						if (targetDimension == targetDimensionEnd)
+						{
+							currentValidMove.x = targetDimensionIndex;
+							currentValidMove.y = otherDimensionIndex;
+						}
+						else
+						{
+							currentValidMove.x = otherDimensionIndex;
+							currentValidMove.y = targetDimensionIndex;
+						}
 
-						if (grid[x, y] == (int)TileType.Empty)
-						{
-							validMove.x = x;
-							validMove.y = y;
-						}
-						else if (grid[x, y] != (int)TileType.Empty && validMove.IsNull() == false)
-						{
-							validMoves.Add(validMove);
-							break;
-						}
+						targetDimensionIndex += incrementor;
 					}
 				}
+				validMoves.Add(currentValidMove);
 			}
+			return validMoves;
 		}
+		
 	}
 }

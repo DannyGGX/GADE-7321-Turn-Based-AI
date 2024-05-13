@@ -16,8 +16,8 @@ namespace DannyG
 		public override void StartTurn()
 		{
 			base.StartTurn();
-			CurrentTurnValidMoves = ValidMovesCalculator.CalculateValidMoves();
-			
+			CurrentTurnValidMoves = ValidMovesCalculator.GetValidMoves();
+			ValidMovesDebugText.Instance.SetText(CurrentTurnValidMoves);
 			BoardInput.Instance.StartTurn(new ValidMovesData(CurrentTurnValidMoves));
 		}
 
