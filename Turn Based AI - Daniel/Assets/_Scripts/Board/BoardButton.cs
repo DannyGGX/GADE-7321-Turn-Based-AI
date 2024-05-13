@@ -13,8 +13,6 @@ namespace DannyG
         public void Initialize(Action<Coordinate> buttonCallback)
         {
             button.onClick.AddListener(() => ButtonClicked(buttonCallback));
-
-            SetEnableState(false);
         }
 
         private void ButtonClicked(Action<Coordinate> buttonCallback)

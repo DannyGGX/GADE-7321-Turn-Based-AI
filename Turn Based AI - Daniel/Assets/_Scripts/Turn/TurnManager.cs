@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityUtils;
 
@@ -28,8 +29,9 @@ namespace DannyG
 			EventManager.onDrawGame.Unsubscribe(DontStartTurn);
 			EventManager.onPlayerWin.Unsubscribe(PlayerWonGame);
 		}
-		private void Start()
+		private IEnumerator Start()
 		{
+			yield return null;
 			_currentPlayer = SetupDataLocator.GameSetupData.startingPlayer;
 			StartTurn();
 		}

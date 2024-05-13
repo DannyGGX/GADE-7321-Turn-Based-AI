@@ -40,6 +40,7 @@ namespace DannyG
 			{
 				_buttons[buttonIndex] = Instantiate(buttonPrefab, transform);
 				_buttons[buttonIndex].transform.localScale = new Vector3(scaleModifier, scaleModifier, 1);
+				_buttons[buttonIndex].SetEnableState(false);
 			}
 
 			return;
