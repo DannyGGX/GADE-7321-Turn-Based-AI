@@ -68,6 +68,7 @@ namespace DannyG
 		}
 
 		private delegate bool LoopEndCondition(int index);
+		private delegate int GetCurrentGridValue();
 		
 		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
@@ -75,18 +76,20 @@ namespace DannyG
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
 
+			// set current loop index variables before the Action delegate that uses them.
 			int otherDimensionIndex = default;
 			int targetDimensionIndex = default;
 			
 			// set dimension variables
-			var targetDimension = inXDimension ? 0 : 1;
-			int ReachEndLoopAddition = inReverseLoop ? 1 : -1;
 			var targetDimensionLength = inXDimension ? grid.GetLength(0) : grid.GetLength(1);
 			var otherDimensionLength = inXDimension ? grid.GetLength(1) : grid.GetLength(0);
 			Action setCurrentValidMove = inXDimension ? SetCurrentValidMoveForXTargetDimension : SetCurrentValidMoveForYTargetDimension;
+			GetCurrentGridValue getCurrentGridValue =
+				inXDimension ? GetGridValueForXTargetDimension : GetGridValueForYTargetDimension;
 			
 			// set loop direction variables
 			int incrementor = inReverseLoop ? -1 : 1;
+			int reachEndLoopAddition = inReverseLoop ? 1 : -1;
 			int targetDimensionStartIndex = inReverseLoop ? targetDimensionLength - 1 : 0;
 			int targetDimensionEndIndex = inReverseLoop ? 0 : targetDimensionLength - 1;
 			LoopEndCondition endCondition = inReverseLoop ? ReverseLoopEndCondition : ForwardLoopEndCondition;
@@ -96,7 +99,7 @@ namespace DannyG
 			{
 				targetDimensionIndex = targetDimensionStartIndex;
 				// if first cell is not empty, loop until an empty cell is found
-				while (endCondition(targetDimensionIndex) && grid[otherDimensionIndex, targetDimensionIndex] != (int)TileType.Empty)
+				while (endCondition(targetDimensionIndex) && getCurrentGridValue() != (int)TileType.Empty)
 				{
 					targetDimensionIndex += incrementor;
 				}
@@ -105,14 +108,14 @@ namespace DannyG
 				if (targetDimensionIndex == targetDimensionEndIndex) continue; 
 			
 				// once the first empty tile is found, loop until the current cell is not an empty tile
-				while (endCondition(targetDimensionIndex + ReachEndLoopAddition) && grid[otherDimensionIndex, targetDimensionIndex] == (int)TileType.Empty)
+				while (endCondition(targetDimensionIndex + reachEndLoopAddition) && getCurrentGridValue() == (int)TileType.Empty)
 					                                        //^ +1 or -1 so that operator in endCondition can work like >= or <=
 				{
-					// save the coordinates for the empty tile before incrementing to the next cell
-					setCurrentValidMove.Invoke();
 					targetDimensionIndex += incrementor;
 				}
 				
+				targetDimensionIndex += incrementor * -1; // go back to index before, then save the valid move
+				setCurrentValidMove.Invoke();
 				validMoves.Add(currentValidMove);
 			}
 			return validMoves;
@@ -125,12 +128,14 @@ namespace DannyG
 				currentValidMove.x = targetDimensionIndex;
 				currentValidMove.y = otherDimensionIndex;
 			}
-
 			void SetCurrentValidMoveForYTargetDimension()
 			{
 				currentValidMove.x = otherDimensionIndex;
 				currentValidMove.y = targetDimensionIndex;
 			}
+			
+			int GetGridValueForXTargetDimension() => grid[targetDimensionIndex, otherDimensionIndex];
+			int GetGridValueForYTargetDimension() => grid[otherDimensionIndex, targetDimensionIndex];
 		}
 		
 	}
