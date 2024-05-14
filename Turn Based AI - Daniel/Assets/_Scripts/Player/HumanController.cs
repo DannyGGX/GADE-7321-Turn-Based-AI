@@ -27,8 +27,7 @@ namespace DannyG
 			if (TurnManager.Instance.currentPlayer != PlayerData.PlayerId) return;
 			// If there are 2 instances of this class and the buttons for the input subscribe this method callback, then this will be called twice.
 
-			StartCoroutine(DisableButtons());
-			//BoardInput.Instance.DisableButtons();
+			//StartCoroutine(DisableButtons());
 			base.MakeAMove(placeToMove);
 		}
 		

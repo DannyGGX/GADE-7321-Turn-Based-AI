@@ -38,10 +38,16 @@ namespace DannyG
 
 		private void StartTurn()
 		{
-			if(!_canStartTurn) return;
 			_turnCount++;
-			
 			EventManager.onTurnStart.Invoke(_currentPlayer);
+		}
+
+		private void NextTurn()
+		{
+			if(!_canStartTurn) return;
+			//_currentPlayer = (PlayerId)_currentPlayer.Next(); // this returned 0 on third turn. Next() needs to be improved
+			_currentPlayer = _currentPlayer == PlayerId.Player1 ? PlayerId.Player2 : PlayerId.Player1;
+			StartTurn();
 		}
 		
 		private void OnDisplayFinishedUpdating()
@@ -55,7 +61,7 @@ namespace DannyG
 			{
 				_hasGravityShiftedInCurrentTurn = false;
 				//_currentPlayer = _currentPlayer.Next();
-				StartTurn(); // once the board has finished updating, start the next turn
+				NextTurn(); // once the board has finished updating, start the next turn
 			}
 		}
 

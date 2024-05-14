@@ -62,7 +62,7 @@ public class Event<T>
         _event?.Invoke(parameter);
         if (_logMessage != null)
         {
-            Debug.Log($"Event invoked: {_logMessage}\nParameter: {parameter}");
+            Debug.Log($"Event invoked: {_logMessage}\nParameter: {parameter.ToString()}");
         }
     }
     
@@ -97,7 +97,7 @@ public class Event<T1, T2>
         _event?.Invoke(parameter1, parameter2);
         if (_logMessage != null)
         {
-            Debug.Log($"Event invoked: {_logMessage}\nParameters: {parameter1}, {parameter2}");
+            Debug.Log($"Event invoked: {_logMessage}\nParameters: {parameter1.ToString()}, {parameter2.ToString()}");
         }
     }
 
