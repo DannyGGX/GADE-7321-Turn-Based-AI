@@ -10,6 +10,7 @@ namespace DannyG
 	public class TurnManager : Singleton<TurnManager>
 	{
 		[SerializeField] private int turnsBeforeGravityShift = 3;
+		public int TurnsBeforeGravityShift => turnsBeforeGravityShift;
 		
 		private int _turnCount = 0;
 		private bool _canStartTurn = true;
