@@ -11,26 +11,39 @@ namespace DannyG
             this.x = x;
             this.y = y;
         }
-        
+
+        #region Operations
+
         public static Coordinate operator +(Coordinate a, Coordinate b)
         {
             return new Coordinate(a.x + b.x, a.y + b.y);
         }
-
         public static Coordinate operator -(Coordinate a, Coordinate b)
         {
             return new Coordinate(a.x - b.x, a.y - b.y);
         }
-        
         public static bool operator ==(Coordinate a, Coordinate b)
         {
             return a.x == b.x && a.y == b.y;
         }
-        
         public static bool operator !=(Coordinate a, Coordinate b)
         {
             return a.x != b.x || a.y != b.y;
         }
+        public bool Equals(Coordinate other)
+        {
+            return x == other.x && y == other.y;
+        }
+        public override bool Equals(object obj)
+        {
+            return obj is Coordinate other && Equals(other);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(x, y);
+        }
+
+        #endregion
         
         public void Update(int x, int y)
         {

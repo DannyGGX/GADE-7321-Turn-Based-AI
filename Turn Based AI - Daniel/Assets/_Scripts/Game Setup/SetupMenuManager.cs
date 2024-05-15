@@ -14,7 +14,7 @@ namespace DannyG
 		
 
 		// Start is called before the first frame update
-		void Awake()
+		protected override void Awake()
 		{
 			_mapPresets = Resources.Load<MapPresetsSO>("Map Presets");
 			_mapPresets.Init();
