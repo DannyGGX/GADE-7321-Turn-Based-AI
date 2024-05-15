@@ -262,7 +262,7 @@ Transform:
   m_GameObject: {fileID: 107245211}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 814.5621, y: 503.9324, z: -4.9368877}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1118,8 +1118,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070474298}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1660,8 +1660,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2026514970}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2335205, y: -1.1101685, z: -0.66123855}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2203,6 +2203,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_margin.x
+      value: -51.351685
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.8811187
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.9386792
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.8910319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4292997091
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665962420363360609, guid: 22f8b36092ec9ff43a4abfc45b392012, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2214,6 +2238,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 175158042}
   - {fileID: 811551198}
+  - {fileID: 107245213}
   - {fileID: 2026514972}
   - {fileID: 1070474300}
   - {fileID: 1365263895}
@@ -2221,4 +2246,3 @@ SceneRoots:
   - {fileID: 1086740390}
   - {fileID: 706476395}
   - {fileID: 1918120788}
-  - {fileID: 107245213}
