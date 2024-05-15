@@ -60,7 +60,6 @@ namespace DannyG
 			else // turn has ended
 			{
 				_hasGravityShiftedInCurrentTurn = false;
-				//_currentPlayer = _currentPlayer.Next();
 				NextTurn(); // once the board has finished updating, start the next turn
 			}
 		}

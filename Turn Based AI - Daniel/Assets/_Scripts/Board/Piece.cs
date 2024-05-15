@@ -9,7 +9,7 @@ namespace DannyG
 	/// </summary>
 	public class Piece : Tile
 	{
-		public Coordinate coordinate { get; set; } = new Coordinate(0, 0);
+		public Coordinate coordinate { get; private set; }
 		public override void Place(Vector3 startingPosition, Vector3 targetPosition, float overallScaleModifier)
 		{
 			base.Place(startingPosition, targetPosition, overallScaleModifier);

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-
 
 namespace DannyG
 {
@@ -34,7 +34,7 @@ namespace DannyG
 			EventManager.onApplyGravityShiftToDisplay.Unsubscribe(ShiftPieces);
 		}
 		
-		private void CreatePiece(MoveData moveData)
+		private async void CreatePiece(MoveData moveData)
 		{
 			Piece currentPiece = _tileDisplayFactory.CreatePiece(
 				MoveData.ConvertToTileType(moveData.PlayerId)
@@ -45,7 +45,7 @@ namespace DannyG
 			_pieces.Add(moveData.Coordinate, currentPiece);
 
 			PlacePiece(currentPiece, moveData.Coordinate);
-			
+			await Task.Yield();
 			EventManager.onBoardDisplayFinishedUpdating.Invoke(); // temporary
 		}
 

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityUtils;
 
@@ -18,9 +19,13 @@ namespace DannyG
 			EventManager.onGravityShift.Unsubscribe(ShiftGravity);
 		}
 
-		private void ShiftGravity()
+		private async void ShiftGravity()
 		{
 			GravityManager.NextGravityState();
+			
+			// temporary
+			await Task.Yield();
+			EventManager.onBoardDisplayFinishedUpdating.Invoke();
 		}
 	}
 }
