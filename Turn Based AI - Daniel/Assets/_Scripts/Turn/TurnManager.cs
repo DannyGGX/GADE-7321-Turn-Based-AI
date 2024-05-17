@@ -11,12 +11,13 @@ namespace DannyG
 	{
 		[SerializeField] private int turnsBeforeGravityShift = 3;
 		public int TurnsBeforeGravityShift => turnsBeforeGravityShift;
+		public PlayerId currentPlayer => _currentPlayer;
+		public int turnCount => _turnCount;
 		
 		private int _turnCount = 0;
 		private bool _canStartTurn = true;
 		private bool _hasGravityShiftedInCurrentTurn = false;
 		private PlayerId _currentPlayer; 
-		public PlayerId currentPlayer => _currentPlayer;
 		
 		private void OnEnable()
 		{

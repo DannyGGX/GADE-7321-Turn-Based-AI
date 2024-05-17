@@ -46,6 +46,7 @@ namespace DannyG
 
 			PlacePiece(currentPiece, moveData.Coordinate);
 			await Task.Yield();
+			await Task.Yield();
 			EventManager.onBoardDisplayFinishedUpdating.Invoke(); // temporary
 		}
 
