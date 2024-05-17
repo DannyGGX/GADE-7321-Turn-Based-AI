@@ -8,30 +8,34 @@ namespace DannyG
 
 	public class ValidMovesCalculator
 	{
+		private int[,] _grid;
+		
+		// dimension variables
+		private int _targetDimensionLength;
+		private int _otherDimensionLength;
+		private Action _setCurrentValidMove;
+		private delegate int GetCurrentGridValue();
+		private GetCurrentGridValue _getCurrentGridValue;
+		
+		// loop direction variables
+		private int _incrementor;
+		private int _reachEndLoopAddition;
+		private int _targetDimensionStartIndex;
+		private int _targetDimensionEndIndex;
+		private delegate bool LoopEndCondition(int index);
+		private LoopEndCondition _endCondition;
 
 		public List<Coordinate> GetValidMoves()
 		{
-			List<Coordinate> validMoves;
-			
-			switch (GravityManager.currentGravityState)
+			return GravityManager.currentGravityState switch
 			{
-				case GravityStates.Down:
-					validMoves = CalculateValidMoves(false, true);
-					//ForEachColumnOrderedTopToBottom(out validMoves); // older implementation. It worked, but wasn't adaptable.
-					break;
-				case GravityStates.Right:
-					validMoves = CalculateValidMoves(true, false);
-					break;
-				case GravityStates.Up:
-					validMoves = CalculateValidMoves(false, false);
-					break;
-				case GravityStates.Left:
-					validMoves = CalculateValidMoves(true, true);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			return validMoves;
+				GravityStates.Down => CalculateValidMoves(false, true),
+				//GravityStates.Down => ForEachColumnOrderedTopToBottom(); // older implementation. It worked, but wasn't adaptable.
+				GravityStates.Right => CalculateValidMoves(true, false),
+				GravityStates.Up => CalculateValidMoves(false, false),
+				GravityStates.Left => CalculateValidMoves(true, true),
+				_ => throw new ArgumentOutOfRangeException()
+			};
 		}
 
 		/// <summary>
@@ -39,11 +43,11 @@ namespace DannyG
 		/// This one can be used to more easily understand the below function.
 		/// </summary>
 		/// <param name="validMoves"></param>
-		private void ForEachColumnOrderedTopToBottom(out List<Coordinate> validMoves)
+		private List<Coordinate> ForEachColumnOrderedTopToBottom()
 		{
 			int[,] grid = BoardStateManager.Instance.grid;
 
-			validMoves = new List<Coordinate>();
+			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
 
 			for (int x = 0; x < grid.GetLength(0); x++)
@@ -65,14 +69,13 @@ namespace DannyG
 				}
 				validMoves.Add(currentValidMove);
 			}
+			return validMoves;
 		}
-
-		private delegate bool LoopEndCondition(int index);
-		private delegate int GetCurrentGridValue();
+		
 		
 		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
-			var grid = BoardStateManager.Instance.grid;
+			_grid = BoardStateManager.Instance.grid;
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
 
@@ -80,48 +83,74 @@ namespace DannyG
 			int otherDimensionIndex = default;
 			int targetDimensionIndex = default;
 			
-			// set dimension variables
-			var targetDimensionLength = inXDimension ? grid.GetLength(0) : grid.GetLength(1);
-			var otherDimensionLength = inXDimension ? grid.GetLength(1) : grid.GetLength(0);
-			Action setCurrentValidMove = inXDimension ? SetCurrentValidMoveForXTargetDimension : SetCurrentValidMoveForYTargetDimension;
-			GetCurrentGridValue getCurrentGridValue =
-				inXDimension ? GetGridValueForXTargetDimension : GetGridValueForYTargetDimension;
-			
-			// set loop direction variables
-			int incrementor = inReverseLoop ? -1 : 1;
-			int reachEndLoopAddition = inReverseLoop ? 1 : -1;
-			int targetDimensionStartIndex = inReverseLoop ? targetDimensionLength - 1 : 0;
-			int targetDimensionEndIndex = inReverseLoop ? 0 : targetDimensionLength - 1;
-			LoopEndCondition endCondition = inReverseLoop ? ReverseLoopEndCondition : ForwardLoopEndCondition;
+			SetDimensionVariables(inXDimension);
+			SetLoopDirectionVariables(inReverseLoop);
 
 			// loop normally through the non-target dimension
-			for (otherDimensionIndex = 0; otherDimensionIndex < otherDimensionLength; otherDimensionIndex++)
+			for (otherDimensionIndex = 0; otherDimensionIndex < _otherDimensionLength; otherDimensionIndex++)
 			{
-				targetDimensionIndex = targetDimensionStartIndex;
+				targetDimensionIndex = _targetDimensionStartIndex;
 				// if first cell is not empty, loop until an empty cell is found
-				while (endCondition(targetDimensionIndex) && getCurrentGridValue() != (int)TileType.Empty)
+				while (_endCondition(targetDimensionIndex) && _getCurrentGridValue() != (int)TileType.Empty)
 				{
-					targetDimensionIndex += incrementor;
+					targetDimensionIndex += _incrementor;
 				}
 				
 				// if there are no empty tiles in the row or column
-				if (targetDimensionIndex == targetDimensionEndIndex) continue; 
+				if (targetDimensionIndex == _targetDimensionEndIndex) continue; 
 			
 				// once the first empty tile is found, loop until the current cell is not an empty tile
-				while (endCondition(targetDimensionIndex + reachEndLoopAddition) && getCurrentGridValue() == (int)TileType.Empty)
+				while (_endCondition(targetDimensionIndex + _reachEndLoopAddition) && _getCurrentGridValue() == (int)TileType.Empty)
 					                                        //^ +1 or -1 so that operator in endCondition can work like >= or <=
 				{
-					targetDimensionIndex += incrementor;
+					targetDimensionIndex += _incrementor;
 				}
 				
-				targetDimensionIndex += incrementor * -1; // go back to index before, then save the valid move
-				setCurrentValidMove.Invoke();
+				targetDimensionIndex += _incrementor * -1; // go back to index before, then save the valid move
+				_setCurrentValidMove.Invoke();
 				validMoves.Add(currentValidMove);
 			}
 			return validMoves;
+			
+			void SetDimensionVariables(bool inXDimension)
+			{
+				if (inXDimension)
+				{
+					_targetDimensionLength = _grid.GetLength(0);
+					_otherDimensionLength = _grid.GetLength(1);
+					_setCurrentValidMove = SetCurrentValidMoveForXTargetDimension;
+					_getCurrentGridValue = GetGridValueForXTargetDimension;
+				}
+				else
+				{
+					_targetDimensionLength = _grid.GetLength(1);
+					_otherDimensionLength = _grid.GetLength(0);
+					_setCurrentValidMove = SetCurrentValidMoveForYTargetDimension;
+					_getCurrentGridValue = GetGridValueForYTargetDimension;
+				}
+			}
+			void SetLoopDirectionVariables(bool inReverseLoop)
+			{
+				if (inReverseLoop)
+				{
+					_incrementor = -1;
+					_reachEndLoopAddition = 1;
+					_targetDimensionStartIndex = _targetDimensionLength - 1;
+					_targetDimensionEndIndex = 0;
+					_endCondition = ReverseLoopEndCondition;
+				}
+				else
+				{
+					_incrementor = 1;
+					_reachEndLoopAddition = -1;
+					_targetDimensionStartIndex = 0;
+					_targetDimensionEndIndex = _targetDimensionLength - 1;
+					_endCondition = ForwardLoopEndCondition;
+				}
+			}
 
-			bool ForwardLoopEndCondition(int index) => index < targetDimensionEndIndex;
-			bool ReverseLoopEndCondition(int index) => index > targetDimensionEndIndex;
+			bool ForwardLoopEndCondition(int index) => index < _targetDimensionEndIndex;
+			bool ReverseLoopEndCondition(int index) => index > _targetDimensionEndIndex;
 
 			void SetCurrentValidMoveForXTargetDimension()
 			{
@@ -134,8 +163,8 @@ namespace DannyG
 				currentValidMove.y = targetDimensionIndex;
 			}
 			
-			int GetGridValueForXTargetDimension() => grid[targetDimensionIndex, otherDimensionIndex];
-			int GetGridValueForYTargetDimension() => grid[otherDimensionIndex, targetDimensionIndex];
+			int GetGridValueForXTargetDimension() => _grid[targetDimensionIndex, otherDimensionIndex];
+			int GetGridValueForYTargetDimension() => _grid[otherDimensionIndex, targetDimensionIndex];
 		}
 		
 	}
