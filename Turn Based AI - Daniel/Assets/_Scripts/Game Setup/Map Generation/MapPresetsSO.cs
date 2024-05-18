@@ -15,6 +15,7 @@ namespace DannyG
 			_mapList.Add(_map0);
 			_mapList.Add(_map1);
 			_mapList.Add(_map2);
+			//_mapList.Add(_map4); // test board with odd number of rows and columns
 		}
 		public int[,] ChooseRandomMap()
 		{
@@ -73,6 +74,18 @@ namespace DannyG
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		};
+		private readonly int[,] _map4 =
+		{
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		};
 	}
 }

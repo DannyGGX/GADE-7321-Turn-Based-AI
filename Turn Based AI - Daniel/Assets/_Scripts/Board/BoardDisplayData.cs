@@ -94,12 +94,15 @@ namespace DannyG
         {
             float xMidpoint = CalculateMidpointOfTileCenters(_cellsWide);
             float yMidpoint = CalculateMidpointOfTileCenters(_cellsHigh);
-            _originTileCenterPosition = new Vector3(_centerPosition.x - xMidpoint, _centerPosition.y - yMidpoint);
+            float orginX = (_centerPosition.x - xMidpoint) + (_tileLength / 2);
+            float orginY = (_centerPosition.y - yMidpoint) + (_tileLength / 2);
+            _originTileCenterPosition = new Vector3(orginX, orginY);
 
             float CalculateMidpointOfTileCenters(float edgeCellNumber)
             {
                 return edgeCellNumber * _tileLength / 2;
             }
+            
         }
         
         private void CalculateTileCenterPositions()
