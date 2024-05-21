@@ -20,7 +20,7 @@ namespace DannyG
 		
 		private void Start()
 		{
-			BackSlashDiagonalAlgorithm1();
+			Algorithm3();
 			PrintOutput();
 		}
 
@@ -92,8 +92,9 @@ namespace DannyG
 			int yLength = _board.GetLength(1);
 			int outputX = 0;
 			int outputY = 0;
+			const int cutOff = 3;
 
-			for (int y = 0; y < yLength; y++)
+			for (int y = cutOff; y < yLength; y++)
 			{
 				int row = y;
 				int col = 0;
@@ -108,7 +109,7 @@ namespace DannyG
 				outputY++;
 			}
 
-			for (int x = 1; x < xLength; x++)
+			for (int x = 1; x < xLength - cutOff; x++)
 			{
 				int row = yLength - 1;
 				int col = x;

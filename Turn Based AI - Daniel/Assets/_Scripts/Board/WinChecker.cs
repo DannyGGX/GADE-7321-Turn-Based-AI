@@ -12,8 +12,9 @@ namespace DannyG
 		
 		private int[,] _board;
 		private int _maxMoveNumber;
-		
-		
+		private int _currentNumberOfPiecesInALine;
+
+
 		private void Start()
 		{
 			EventManager.onPlacePiece.Subscribe(CheckForWinAroundPiece);
@@ -40,64 +41,67 @@ namespace DannyG
 				}
 			}
 		}
+
+		private async Task StartOfWinCheck()
+		{
+			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
+			_board = BoardStateManager.Instance.grid;
+			await Task.Yield(); // wait for board to update // make sure that the board update event is sent after this method
+		}
 		
 		private async void CheckForWinAroundPiece(MoveData moveData)
 		{
-			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
-			await Task.Yield(); // wait for board to update // make sure that the board update event is sent after this method
-			_board = BoardStateManager.Instance.grid;
+			await StartOfWinCheck();
 			
-			
+			CheckForWinOnWholeBoard(new AllShiftedTilesData()); // temporary while the other algorithm is not implemented
 			//Check after checking for win
 			CheckForDraw();
 		}
 		
 		private async void CheckForWinOnWholeBoard(AllShiftedTilesData allShiftedTiles)
 		{
-			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
-			await Task.Yield(); // wait for board to update // make sure that the board update event is sent after this method
-			_board = BoardStateManager.Instance.grid;
-			int currentNumberOfPiecesInALine = 0;
+			//await StartOfWinCheck(); // temporary while the other algorithm is not implemented
+			_currentNumberOfPiecesInALine = 0;
 			bool isPlayer1Line = default;
 			
 			LoopHorizontally();
 			LoopVertically();
 			LoopForwardDiagonally();
 			LoopBackwardsDiagonally();
-			CheckForDraw(); // temporary while the other algorithm is not implemented
+			return;
 
-			void AddToNumberOfPiecesInALine(int currentX, int currentY)
+			void EditNumberOfPiecesInALine(int currentX, int currentY)
 			{
 				switch (_board[currentX, currentY])
 				{
 					case (int)TileType.Empty:
 					case (int)TileType.Blocker:
-						currentNumberOfPiecesInALine = 0;
+						_currentNumberOfPiecesInALine = 0;
 						break;
 					case (int)TileType.Player1Token:
-						if (isPlayer1Line == false || currentNumberOfPiecesInALine == 0)
+						if (isPlayer1Line == false || _currentNumberOfPiecesInALine == 0)
 						{
-							currentNumberOfPiecesInALine = 1;
+							_currentNumberOfPiecesInALine = 1;
 							isPlayer1Line = true;
 						}
 						else
-							currentNumberOfPiecesInALine++;
+							_currentNumberOfPiecesInALine++;
 						break;
 					case (int)TileType.Player2Token:
-						if (isPlayer1Line || currentNumberOfPiecesInALine == 0)
+						if (isPlayer1Line || _currentNumberOfPiecesInALine == 0)
 						{
-							currentNumberOfPiecesInALine = 1;
+							_currentNumberOfPiecesInALine = 1;
 							isPlayer1Line = false;
 						}
 						else
-							currentNumberOfPiecesInALine++;
+							_currentNumberOfPiecesInALine++;
 						break;
 				}
 			}
 
 			bool CheckForWin()
 			{
-				if (currentNumberOfPiecesInALine == 4)
+				if (_currentNumberOfPiecesInALine == 4)
 				{
 					EventManager.onPlayerWin.Invoke(isPlayer1Line ? PlayerId.Player1 : PlayerId.Player2);
 					return true;
@@ -111,10 +115,10 @@ namespace DannyG
 				{
 					for (int x = 0; x < _board.GetLength(0); x++)
 					{
-						AddToNumberOfPiecesInALine(x, y);
+						EditNumberOfPiecesInALine(x, y);
 						if (CheckForWin()) return;
 					}
-					currentNumberOfPiecesInALine = 0;
+					_currentNumberOfPiecesInALine = 0;
 				}
 			}
 
@@ -124,21 +128,75 @@ namespace DannyG
 				{
 					for (int y = 0; y < _board.GetLength(1); y++)
 					{
-						AddToNumberOfPiecesInALine(x, y);
+						EditNumberOfPiecesInALine(x, y);
 						if (CheckForWin()) return;
 					}
-					currentNumberOfPiecesInALine = 0;
+					_currentNumberOfPiecesInALine = 0;
 				}
 			}
 
 			void LoopForwardDiagonally() // diagonally like a forward slash
 			{
+				int xLength = _board.GetLength(0);
+				int yLength = _board.GetLength(1);
+				const int cutOff = 3; // don't check diagonals that have 3 elements or less
 				
+				for (int y = cutOff; y < yLength; y++)
+				{
+					int row = y;
+					int col = 0;
+					while (row >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return;
+						row--;
+						col++;
+					}
+				}
+				for (int x = 1; x < xLength - cutOff; x++)
+				{
+					int row = yLength - 1;
+					int col = x;
+					while (col < xLength)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return;
+						row--;
+						col++;
+					}
+				}
 			}
 			
 			void LoopBackwardsDiagonally() // diagonally like a back slash
 			{
+				int xLength = _board.GetLength(0);
+				int yLength = _board.GetLength(1);
+				const int cutOff = 3; // don't check diagonals that have 3 elements or less
 				
+				for (int y = cutOff; y < yLength; y++)
+				{
+					int row = y;
+					int col = xLength - 1;
+					while (row >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return;
+						row--;
+						col--;
+					}
+				}
+				for (int x = xLength - 2; x >= cutOff; x--)
+				{
+					int row = yLength - 1;
+					int col = x;
+					while (col >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return;
+						row--;
+						col--;
+					}
+				}
 			}
 		}
 		
