@@ -46,7 +46,7 @@ namespace DannyG
 		{
 			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
 			_board = BoardStateManager.Instance.grid;
-			await Task.Yield(); // wait for board to update // make sure that the board update event is sent after this method
+			await Task.Yield(); // wait for board state to update // make sure that the board display update event is sent after this method
 		}
 		
 		private async void CheckForWinAroundPiece(MoveData moveData)
@@ -199,8 +199,6 @@ namespace DannyG
 				}
 			}
 		}
-		
-		
 		
 		
 		private void CheckForDraw()

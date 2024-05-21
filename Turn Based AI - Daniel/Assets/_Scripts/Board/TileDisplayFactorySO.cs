@@ -20,42 +20,25 @@ namespace DannyG
         
         public Tile CreateTile(TileType tileType, int x, int y, Transform parent = null)
         {
-            Tile tile;
-            switch (tileType)
+            Tile tile = tileType switch
             {
-                case TileType.Empty:
-                    tile = InitializeAndProvideTile(emptyTilePrefab, x, y, parent);
-                    break;
-                case TileType.Blocker:
-                    tile = InitializeAndProvideTile(prePlacedBlockerPrefab, x, y, parent);
-                    break;
-                case TileType.Player1Token:
-                    tile = CreatePiece(TileType.Player1Token, x, y, parent);
-                    break;
-                case TileType.Player2Token:
-                    tile = CreatePiece(TileType.Player2Token, x, y, parent);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(tileType), tileType, null);
-            }
+                TileType.Empty => InitializeAndProvideTile(emptyTilePrefab, x, y, parent),
+                TileType.Blocker => InitializeAndProvideTile(prePlacedBlockerPrefab, x, y, parent),
+                TileType.Player1Token => CreatePiece(TileType.Player1Token, x, y, parent),
+                TileType.Player2Token => CreatePiece(TileType.Player2Token, x, y, parent),
+                _ => throw new ArgumentOutOfRangeException(nameof(tileType), tileType, null)
+            };
             return tile;
         }
 
         public Piece CreatePiece(TileType tileType, int x, int y, Transform parent = null)
         {
-            Piece piece;
-            switch (tileType)
+            Piece piece = tileType switch
             {
-                case TileType.Player1Token:
-                    piece = InitializeAndProvideTile(player1PiecePrefab, x, y, parent);
-                    break;
-                case TileType.Player2Token:
-                    piece = InitializeAndProvideTile(player2PiecePrefab, x, y, parent);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(tileType), tileType, null);
-            }
-            piece.SetCoordinate(x, y);
+                TileType.Player1Token => InitializeAndProvideTile(player1PiecePrefab, x, y, parent),
+                TileType.Player2Token => InitializeAndProvideTile(player2PiecePrefab, x, y, parent),
+                _ => throw new ArgumentOutOfRangeException(nameof(tileType), tileType, null)
+            };
             return piece;
         }
         
@@ -63,14 +46,14 @@ namespace DannyG
         {
             Vector3 position = _gameSetupData.tileCenterPositions[x, y];
             tile = Instantiate(tile, position, Quaternion.identity, parent);
-            tile.Place(position, position, _gameSetupData.overallScaleModifier);
+            tile.ApplyScale(_gameSetupData.overallScaleModifier);
             return tile;
         }
         private Piece InitializeAndProvideTile(Piece piece, int x, int y, Transform parent = null)
         {
-            Vector3 targetPosition = _gameSetupData.tileCenterPositions[x, y];
-            piece = Instantiate(piece, targetPosition, Quaternion.identity, parent);
-            piece.Place(GetStartingPosition(x, y), targetPosition, _gameSetupData.overallScaleModifier);
+            piece = Instantiate(piece, GetStartingPosition(x, y), Quaternion.identity, parent);
+            piece.ApplyScale(_gameSetupData.overallScaleModifier);
+            piece.SetCoordinate(x, y);
             return piece;
         }
 

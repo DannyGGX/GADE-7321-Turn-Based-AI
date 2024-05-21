@@ -12,23 +12,18 @@ namespace DannyG
 		private TileDisplayFactorySO _tileDisplayFactory;
 		
 		private Dictionary<Coordinate , Piece> _pieces = new Dictionary<Coordinate, Piece>();
-		
-		private void OnEnable()
-		{
-			EventManager.onPlacePiece.Subscribe(CreatePiece);
-			EventManager.onApplyGravityShiftToDisplay.Subscribe(ShiftPieces);
-
-			
-		}
 
 		private void Start()
 		{
+			EventManager.onPlacePiece.Subscribe(CreatePiece);
+			EventManager.onApplyGravityShiftToDisplay.Subscribe(ShiftPieces);
+			
 			_gameSetupData = SetupDataLocator.GameSetupData;
 			_tileDisplayFactory = _gameSetupData.tileFactory;
 		}
 
 
-		private void OnDisable()
+		private void OnDestroy()
 		{
 			EventManager.onPlacePiece.Unsubscribe(CreatePiece);
 			EventManager.onApplyGravityShiftToDisplay.Unsubscribe(ShiftPieces);
@@ -49,8 +44,6 @@ namespace DannyG
 
 		private void MovePiece(Piece piece, Coordinate coordinate)
 		{
-			// Vector3 startingPosition = GetStartingPosition(coordinate.x, coordinate.y); // This is duplicate code. It is in the TileDisplayFactory
-			// piece.Place(startingPosition, targetPosition, _gameSetupData.overallScaleModifier);
 			Vector3 targetPosition = _gameSetupData.tileCenterPositions[coordinate.x, coordinate.y];
 			piece.MoveTo(targetPosition, OnPieceFinishedMoving);
 		}
@@ -59,23 +52,6 @@ namespace DannyG
 		{
 			EventManager.onBoardDisplayFinishedUpdating.Invoke();
 		}
-
-		// private Vector3 GetStartingPosition(int x, int y) // This is duplicate code. It is in the TileDisplayFactory
-		// {
-		// 	GravityStates currentGravityState = GravityManager.currentGravityState;
-		// 	Vector3[] startingPositions = _gameSetupData.startingPositions[currentGravityState];
-		// 	switch (currentGravityState)
-		// 	{
-		// 		case GravityStates.Down:
-		// 		case GravityStates.Up:
-		// 			return startingPositions[x];
-		// 		case GravityStates.Left:
-		// 		case GravityStates.Right:
-		// 			return startingPositions[y];
-		// 		default:
-		// 			throw new ArgumentOutOfRangeException();
-		// 	}
-		// }
 		
 		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{
