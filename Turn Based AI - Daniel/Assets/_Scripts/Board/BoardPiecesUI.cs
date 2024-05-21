@@ -44,35 +44,38 @@ namespace DannyG
 			
 			_pieces.Add(moveData.Coordinate, currentPiece);
 
-			PlacePiece(currentPiece, moveData.Coordinate);
-			await Task.Yield();
-			await Task.Yield();
-			EventManager.onBoardDisplayFinishedUpdating.Invoke(); // temporary
+			MovePiece(currentPiece, moveData.Coordinate);
 		}
 
-		private void PlacePiece(Piece piece, Coordinate coordinate)
+		private void MovePiece(Piece piece, Coordinate coordinate)
 		{
-			Vector3 startingPosition = GetStartingPosition(coordinate.x, coordinate.y);
+			// Vector3 startingPosition = GetStartingPosition(coordinate.x, coordinate.y); // This is duplicate code. It is in the TileDisplayFactory
+			// piece.Place(startingPosition, targetPosition, _gameSetupData.overallScaleModifier);
 			Vector3 targetPosition = _gameSetupData.tileCenterPositions[coordinate.x, coordinate.y];
-			piece.Place(startingPosition, targetPosition, _gameSetupData.overallScaleModifier);
+			piece.MoveTo(targetPosition, OnPieceFinishedMoving);
+		}
+		
+		private void OnPieceFinishedMoving()
+		{
+			EventManager.onBoardDisplayFinishedUpdating.Invoke();
 		}
 
-		private Vector3 GetStartingPosition(int x, int y)
-		{
-			GravityStates currentGravityState = GravityManager.currentGravityState;
-			Vector3[] startingPositions = _gameSetupData.startingPositions[currentGravityState];
-			switch (currentGravityState)
-			{
-				case GravityStates.Down:
-				case GravityStates.Up:
-					return startingPositions[x];
-				case GravityStates.Left:
-				case GravityStates.Right:
-					return startingPositions[y];
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
+		// private Vector3 GetStartingPosition(int x, int y) // This is duplicate code. It is in the TileDisplayFactory
+		// {
+		// 	GravityStates currentGravityState = GravityManager.currentGravityState;
+		// 	Vector3[] startingPositions = _gameSetupData.startingPositions[currentGravityState];
+		// 	switch (currentGravityState)
+		// 	{
+		// 		case GravityStates.Down:
+		// 		case GravityStates.Up:
+		// 			return startingPositions[x];
+		// 		case GravityStates.Left:
+		// 		case GravityStates.Right:
+		// 			return startingPositions[y];
+		// 		default:
+		// 			throw new ArgumentOutOfRangeException();
+		// 	}
+		// }
 		
 		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{

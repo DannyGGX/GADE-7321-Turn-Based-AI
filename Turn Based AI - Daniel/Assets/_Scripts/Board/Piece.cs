@@ -1,5 +1,7 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace DannyG
@@ -9,16 +11,19 @@ namespace DannyG
 	/// </summary>
 	public class Piece : Tile
 	{
+		private float distanceToTimeFactor = 20;
 		public Coordinate coordinate { get; private set; }
 		public override void Place(Vector3 startingPosition, Vector3 targetPosition, float overallScaleModifier)
 		{
 			base.Place(startingPosition, targetPosition, overallScaleModifier);
-			Move(targetPosition);
+			//MoveTo(targetPosition);
 		}
 
-		public void Move(Vector3 targetPosition)
+		public void MoveTo(Vector3 targetPosition, Action onCompleteCallback)
 		{
-			transform.position = targetPosition;
+			//transform.position = targetPosition;
+			transform.DOMove(targetPosition, GetMoveTime(targetPosition)).SetEase(Ease.Linear).onComplete =
+				onCompleteCallback.Invoke;
 		}
 		
 		public void SetCoordinate(int x, int y)
@@ -29,6 +34,11 @@ namespace DannyG
 		{
 			this.coordinate = coordinate;
 		}
-		
+
+		private float GetMoveTime(Vector3 targetPosition)
+		{
+			float distance = Vector3.Distance(transform.position, targetPosition);
+			return distance / distanceToTimeFactor;
+		}
 	}
 }
