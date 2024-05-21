@@ -6,18 +6,18 @@ namespace DannyG
     public class BoardDisplayData
     {
         // input variables
-        private int _cellsWide; // number of cells wide
-        private int _cellsHigh; // number of cells high
-        private float _frameWidth;
-        private float _frameHeight;
-        private float _margin;
-        private Vector3 _centerPosition;
+        private readonly int _cellsWide; // number of cells wide
+        private readonly int _cellsHigh; // number of cells high
+        private readonly float _frameWidth;
+        private readonly float _frameHeight;
+        private readonly float _margin;
+        private readonly Vector3 _centerPosition;
         
         // calculation variables
         private float _tileLength;
         private float _boardWidth;
         private float _boardHeight;
-        private const int ExtraEdge = 1;
+        private const int ClosingEdge = 1;
         private Vector3 _originTileCenterPosition;
         private const float TileLengthToScaleMultiplier = 1 / 1.125f; // 1 scale to a tile length of 1.125
         
@@ -65,12 +65,12 @@ namespace DannyG
             {
                 _tileLength = CalculateTileLengthWithFrameEdge(_frameWidth, _cellsWide);
             }
-            float CalculateTileLengthWithFrameEdge(float frameEdge, int numberOfCellsInEdge)
+            float CalculateTileLengthWithFrameEdge(float frameEdgeLength, int numberOfCellsInEdge)
             {
                 
-                float remainingDistance = frameEdge - (_margin * 2);
+                float remainingDistance = frameEdgeLength - (_margin * 2);
                 
-                remainingDistance = remainingDistance / (numberOfCellsInEdge + ExtraEdge);
+                remainingDistance = remainingDistance / (numberOfCellsInEdge + ClosingEdge);
                 return remainingDistance;
             }
         }
@@ -83,24 +83,24 @@ namespace DannyG
         
         private float CalculateBoardWidth()
         {
-            return (_cellsWide + ExtraEdge) * _tileLength;
+            return (_cellsWide + ClosingEdge) * _tileLength;
         }
         private float CalculateBoardHeight()
         {
-            return (_cellsHigh + ExtraEdge) * _tileLength;
+            return (_cellsHigh + ClosingEdge) * _tileLength;
         }
         
         private void CalculateOriginTileCenterPosition()
         {
             float xMidpoint = CalculateMidpointOfTileCenters(_cellsWide);
             float yMidpoint = CalculateMidpointOfTileCenters(_cellsHigh);
-            float orginX = (_centerPosition.x - xMidpoint) + (_tileLength / 2);
-            float orginY = (_centerPosition.y - yMidpoint) + (_tileLength / 2);
-            _originTileCenterPosition = new Vector3(orginX, orginY);
+            float originX = (_centerPosition.x - xMidpoint) + (_tileLength / 2);
+            float originY = (_centerPosition.y - yMidpoint) + (_tileLength / 2);
+            _originTileCenterPosition = new Vector3(originX, originY);
 
-            float CalculateMidpointOfTileCenters(float edgeCellNumber)
+            float CalculateMidpointOfTileCenters(float numberOfCells)
             {
-                return edgeCellNumber * _tileLength / 2;
+                return numberOfCells * _tileLength / 2;
             }
             
         }

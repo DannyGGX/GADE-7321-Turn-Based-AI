@@ -165,6 +165,7 @@ namespace DannyG
 			
 			int GetGridValueForXTargetDimension() => _grid[targetDimensionIndex, otherDimensionIndex];
 			int GetGridValueForYTargetDimension() => _grid[otherDimensionIndex, targetDimensionIndex];
+			
 		}
 		
 	}
