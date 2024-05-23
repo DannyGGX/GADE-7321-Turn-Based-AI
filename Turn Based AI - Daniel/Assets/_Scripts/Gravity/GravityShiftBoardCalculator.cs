@@ -72,8 +72,8 @@ namespace DannyG
 		{
 			Coordinate currentLandingPosition = new Coordinate();
 			ShiftingStates currentState;
-			_allShiftedTilesData = new AllShiftedTilesData();
-			ShiftTilesLine currentLine = new ShiftTilesLine();
+			_allShiftedTilesData = new AllShiftedTilesData(default);
+			ShiftTilesLine currentLine = new ShiftTilesLine(default);
 			
 			int targetDimensionIndex = default;
 			int otherDimensionIndex = default;
@@ -85,7 +85,6 @@ namespace DannyG
 			for (otherDimensionIndex = 0; otherDimensionIndex < _otherDimensionLength; otherDimensionIndex++)
 			{
 				currentState = ShiftingStates.LookingForLandingPosition;
-				
 				for (targetDimensionIndex = _targetDimensionStartIndex; _endCondition(targetDimensionIndex); targetDimensionIndex += _incrementor)
 				{
 					x = _getCurrentX.Invoke();
@@ -127,14 +126,17 @@ namespace DannyG
 					case (int)TileType.Player2Token:
 						currentState = ShiftingStates.RoundingUpPieces;
 						Coordinate currentPiecePosition = new Coordinate(x, y);
-						currentLine = new ShiftTilesLine();
+						currentLine = new ShiftTilesLine(default);
 						currentLine.CreateShiftAmount(currentPiecePosition, currentLandingPosition);
 						currentLine.AddTile(currentPiecePosition, _grid[x, y]);
 						break;
 					case (int)TileType.Blocker:
 						currentState = ShiftingStates.LookingForLandingPosition;
-						if (currentLine.IsNull() == false)
-							_allShiftedTilesData.AddLineAndSetToNull(currentLine);
+						if (currentLine.count > 0)
+						{
+							_allShiftedTilesData.AddLine(currentLine);
+							currentLine = new ShiftTilesLine(default);
+						}
 						break;
 					case (int)TileType.Empty:
 						break;
@@ -153,11 +155,13 @@ namespace DannyG
 					case (int)TileType.Empty:
 						currentState = ShiftingStates.LookingForPieces;
 						CreateLandingPositionOnShiftedPieces(_incrementor, inXDimension);
-						_allShiftedTilesData.AddLineAndSetToNull(currentLine);
+						_allShiftedTilesData.AddLine(currentLine);
+						currentLine = new ShiftTilesLine(default);
 						break;
 					case (int)TileType.Blocker:
 						currentState = ShiftingStates.LookingForLandingPosition;
-						_allShiftedTilesData.AddLineAndSetToNull(currentLine);
+						_allShiftedTilesData.AddLine(currentLine);
+						currentLine = new ShiftTilesLine(default);
 						break;
 				}
 			}

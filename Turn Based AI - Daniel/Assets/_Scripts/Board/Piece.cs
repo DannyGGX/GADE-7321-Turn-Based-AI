@@ -18,6 +18,11 @@ namespace DannyG
 			transform.DOMove(targetPosition, GetMoveTime(targetPosition)).SetEase(Ease.Linear).onComplete =
 				onCompleteCallback.Invoke;
 		}
+
+		public void AutomaticallyMoveTo(Vector3 targetPosition)
+		{
+			transform.position = targetPosition;
+		}
 		
 		public void SetCoordinate(int x, int y)
 		{

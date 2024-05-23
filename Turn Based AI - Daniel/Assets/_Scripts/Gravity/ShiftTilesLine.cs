@@ -11,9 +11,9 @@ namespace DannyG
 		public Incrementor2D shiftAmount { get; private set; }
 		public int count => lineOfTiles.Count;
 		
-		public ShiftTilesLine(int count = 4)
+		public ShiftTilesLine(int constructorTrigger)
 		{
-			lineOfTiles = new List<Coordinate>(count);
+			lineOfTiles = new List<Coordinate>();
 			shiftAmount = new Incrementor2D();
 		}
 

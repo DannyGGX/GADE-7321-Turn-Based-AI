@@ -62,14 +62,13 @@ namespace DannyG
 				}
 			}
 			
-			this.Log(this.ToString());
 		}
 
 		public override string ToString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append("\n");
-			for (int y = 0; y < grid.GetLength(1); y++)
+			for (int y = grid.GetLength(1) - 1; y >= 0; y--)
 			{
 				for (int x = 0; x < grid.GetLength(0); x++)
 				{
@@ -79,5 +78,7 @@ namespace DannyG
 			}
 			return stringBuilder.ToString();
 		}
+
+		
 	}
 }

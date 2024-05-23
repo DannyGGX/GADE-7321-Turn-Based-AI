@@ -39,9 +39,21 @@ namespace DannyG
 
 		private void Start()
 		{
-			AddToTestList();
-			NormalizeTestList();
+			//AddToTestList();
+			//NormalizeTestList();
 			//PrintResults();
+			TestShiftTilesLineIsNull();
+		}
+
+		private void TestShiftTilesLineIsNull()
+		{
+			ShiftTilesLine shiftTilesLine = new ShiftTilesLine(default);
+			shiftTilesLine.lineOfTiles.Add(new Coordinate(0, 0));
+			shiftTilesLine.lineOfTiles.Add(new Coordinate(0, 1));
+			shiftTilesLine.lineOfTiles.Add(new Coordinate(0, 2));
+			shiftTilesLine.SetToNull();
+			
+			Debug.Log($"Is Shift Tiles Line Null: {shiftTilesLine.IsNull()}");
 		}
 	}
 }

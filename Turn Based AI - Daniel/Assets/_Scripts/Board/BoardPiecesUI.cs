@@ -61,29 +61,29 @@ namespace DannyG
 		{
 			// the below is commented for debugging DOTween error
 			
-			// Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
-			// Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
-			// MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
-			//
-			// foreach (var line in allShiftedTiles.listOfShiftedTiles)
-			// {
-			// 	foreach (var tile in line.lineOfTiles)
-			// 	{
-			// 		piece = ChangePieceCoordinate(tile, line.shiftAmount);
-			// 		MovePiece(piece, piece.coordinate, DoNothing);
-			// 	}
-			// }
-			// return;
-			//
-			// Piece ChangePieceCoordinate(Coordinate coordinate, Incrementor2D shiftAmount)
-			// {
-			// 	Piece currentPiece = _pieces[coordinate];
-			// 	_pieces.Remove(coordinate);
-			// 	coordinate.Increment(shiftAmount);
-			// 	_pieces.Add(coordinate, currentPiece);
-			// 	currentPiece.SetCoordinate(coordinate);
-			// 	return currentPiece;
-			// }
+			Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
+			Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
+			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
+			
+			foreach (var line in allShiftedTiles.listOfShiftedTiles)
+			{
+				foreach (var tile in line.lineOfTiles)
+				{
+					piece = ChangePieceCoordinate(tile, line.shiftAmount);
+					MovePiece(piece, piece.coordinate, DoNothing);
+				}
+			}
+			return;
+			
+			Piece ChangePieceCoordinate(Coordinate coordinate, Incrementor2D shiftAmount)
+			{
+				Piece currentPiece = _pieces[coordinate];
+				_pieces.Remove(coordinate);
+				coordinate.Increment(shiftAmount);
+				_pieces.Add(coordinate, currentPiece);
+				currentPiece.SetCoordinate(coordinate);
+				return currentPiece;
+			}
 		}
 	}
 }

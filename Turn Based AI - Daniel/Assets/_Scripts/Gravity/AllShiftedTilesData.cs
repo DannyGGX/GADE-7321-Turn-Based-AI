@@ -9,15 +9,14 @@ namespace DannyG
 	{
 		public List<ShiftTilesLine> listOfShiftedTiles { get; private set; }
 
-		public AllShiftedTilesData(int count = 10)
+		public AllShiftedTilesData(int constructorTrigger)
 		{
-			listOfShiftedTiles = new List<ShiftTilesLine>(count);
+			listOfShiftedTiles = new List<ShiftTilesLine>();
 		}
 
-		public void AddLineAndSetToNull(ShiftTilesLine currentLine)
+		public void AddLine(ShiftTilesLine currentLine)
 		{
 			listOfShiftedTiles.Add(currentLine);
-			currentLine.SetToNull();
 		}
 		
 		public ShiftTilesLine GetLineWithLargestShiftAmount()
