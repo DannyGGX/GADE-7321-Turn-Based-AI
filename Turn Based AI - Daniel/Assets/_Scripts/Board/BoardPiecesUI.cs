@@ -57,10 +57,9 @@ namespace DannyG
 		{
 		}
 		
-		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
+		private async void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{
-			// the below is commented for debugging DOTween error
-			
+			await Task.Yield(); // wait for board state to update before removing furthest piece
 			Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
 			Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
 			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
