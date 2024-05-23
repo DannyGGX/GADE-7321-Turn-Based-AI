@@ -51,8 +51,9 @@ namespace DannyG
 			void PlaceTiles(ShiftTilesLine line)
 			{
 				Incrementor2D incrementor = line.shiftAmount.Normalize();
-				int x = line.lineOfTiles[0].x;
-				int y = line.lineOfTiles[0].y;
+				incrementor.SetOpposite();
+				int x = line.lineOfTiles[0].x + line.shiftAmount.x;
+				int y = line.lineOfTiles[0].y + line.shiftAmount.y;
 				Coordinate currentCoordinate = new Coordinate(x, y);
 
 				for (int index = 0; index < line.count; index++)
