@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityUtils;
 
@@ -31,7 +33,51 @@ namespace DannyG
 		
 		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{
+			int[] currentLineOfTileData;
 			
+			foreach (var line in allShiftedTiles.listOfShiftedTiles)
+			{
+				currentLineOfTileData = new int[line.count];
+				for (int index = 0; index < line.count; index++)
+				{
+					int x = line.lineOfTiles[index].x;
+					int y = line.lineOfTiles[index].y;
+					currentLineOfTileData[index] = grid[x, y];
+					grid[x, y] = (int)TileType.Empty;
+				}
+				PlaceTiles(line);
+			}
+
+			void PlaceTiles(ShiftTilesLine line)
+			{
+				Incrementor2D incrementor = line.shiftAmount.Normalize();
+				int x = line.lineOfTiles[0].x;
+				int y = line.lineOfTiles[0].y;
+				Coordinate currentCoordinate = new Coordinate(x, y);
+
+				for (int index = 0; index < line.count; index++)
+				{
+					grid[currentCoordinate.x, currentCoordinate.y] = currentLineOfTileData[index];
+					currentCoordinate.Increment(incrementor);
+				}
+			}
+			
+			this.Log(this.ToString());
+		}
+
+		public override string ToString()
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.Append("\n");
+			for (int y = 0; y < grid.GetLength(1); y++)
+			{
+				for (int x = 0; x < grid.GetLength(0); x++)
+				{
+					stringBuilder.Append($"{grid[x, y]} ");
+				}
+				stringBuilder.Append("\n");
+			}
+			return stringBuilder.ToString();
 		}
 	}
 }

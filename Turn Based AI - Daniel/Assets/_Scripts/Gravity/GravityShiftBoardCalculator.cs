@@ -46,9 +46,6 @@ namespace DannyG
 		{
 			GravityManager.NextGravityState();
 			
-			// temporary until gravity shifting is fully implemented
-			EventManager.onApplyGravityShiftToDisplay.Invoke(_allShiftedTilesData); return;
-			
 			_grid = BoardStateManager.Instance.grid;
 			GravityStates currentGravityState = GravityManager.currentGravityState;
 			switch (currentGravityState)

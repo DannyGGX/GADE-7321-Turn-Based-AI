@@ -50,6 +50,12 @@ namespace DannyG
             this.x = x;
             this.y = y;
         }
+
+        public void Increment(Incrementor2D incrementor)
+        {
+            x += incrementor.x;
+            y += incrementor.y;
+        }
     }
     public static class CoordinateExtension
     {

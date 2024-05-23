@@ -36,5 +36,12 @@ namespace DannyG
 		{
 			lineOfTiles.Clear();
 		}
+		
+		public Coordinate ProvideAndRemoveLast()
+		{
+			Coordinate coordinate = lineOfTiles[^1];
+			lineOfTiles.RemoveAt(lineOfTiles.Count - 1);
+			return coordinate;
+		}
 	}
 }

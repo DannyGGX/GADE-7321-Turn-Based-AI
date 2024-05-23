@@ -29,7 +29,7 @@ namespace DannyG
 			EventManager.onApplyGravityShiftToDisplay.Unsubscribe(ShiftPieces);
 		}
 		
-		private async void CreatePiece(MoveData moveData)
+		private void CreatePiece(MoveData moveData)
 		{
 			Piece currentPiece = _tileDisplayFactory.CreatePiece(
 				MoveData.ConvertToTileType(moveData.PlayerId)
@@ -39,25 +39,51 @@ namespace DannyG
 			
 			_pieces.Add(moveData.Coordinate, currentPiece);
 
-			MovePiece(currentPiece, moveData.Coordinate);
+			MovePiece(currentPiece, moveData.Coordinate, OnPieceFinishedMoving);
 		}
 
-		private void MovePiece(Piece piece, Coordinate coordinate)
+		private void MovePiece(Piece piece, Coordinate coordinate, Action onCompleteCallback)
 		{
 			Vector3 targetPosition = _gameSetupData.tileCenterPositions[coordinate.x, coordinate.y];
-			piece.MoveTo(targetPosition, OnPieceFinishedMoving);
+			piece.MoveTo(targetPosition, onCompleteCallback);
 		}
 		
-		private void OnPieceFinishedMoving()
+		private static void OnPieceFinishedMoving()
 		{
 			EventManager.onBoardDisplayFinishedUpdating.Invoke();
 		}
-		
-		private async void ShiftPieces(AllShiftedTilesData allShiftedTiles)
+
+		private static void DoNothing()
 		{
-			await Task.Yield();
-			await Task.Yield();
-			OnPieceFinishedMoving();
+		}
+		
+		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
+		{
+			// the below is commented for debugging DOTween error
+			
+			// Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
+			// Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
+			// MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
+			//
+			// foreach (var line in allShiftedTiles.listOfShiftedTiles)
+			// {
+			// 	foreach (var tile in line.lineOfTiles)
+			// 	{
+			// 		piece = ChangePieceCoordinate(tile, line.shiftAmount);
+			// 		MovePiece(piece, piece.coordinate, DoNothing);
+			// 	}
+			// }
+			// return;
+			//
+			// Piece ChangePieceCoordinate(Coordinate coordinate, Incrementor2D shiftAmount)
+			// {
+			// 	Piece currentPiece = _pieces[coordinate];
+			// 	_pieces.Remove(coordinate);
+			// 	coordinate.Increment(shiftAmount);
+			// 	_pieces.Add(coordinate, currentPiece);
+			// 	currentPiece.SetCoordinate(coordinate);
+			// 	return currentPiece;
+			// }
 		}
 	}
 }
