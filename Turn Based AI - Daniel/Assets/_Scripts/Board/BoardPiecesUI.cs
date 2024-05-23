@@ -53,9 +53,11 @@ namespace DannyG
 			EventManager.onBoardDisplayFinishedUpdating.Invoke();
 		}
 		
-		private void ShiftPieces(AllShiftedTilesData allShiftedTiles)
+		private async void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{
-			
+			await Task.Yield();
+			await Task.Yield();
+			OnPieceFinishedMoving();
 		}
 	}
 }

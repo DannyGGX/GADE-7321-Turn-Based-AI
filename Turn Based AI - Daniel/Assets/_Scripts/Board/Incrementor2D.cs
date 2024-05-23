@@ -20,4 +20,11 @@ namespace DannyG
 		}
 		
 	}
+	public static class Incrementor2DExtensions
+	{
+		public static Incrementor2D ToIncrementor2D(this Coordinate coordinate)
+		{
+			return new Incrementor2D(coordinate.x, coordinate.y);
+		}
+	}
 }
