@@ -113,12 +113,12 @@ namespace DannyG
 			{
 				for (int y = 0; y < _board.GetLength(1); y++)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					for (int x = 0; x < _board.GetLength(0); x++)
 					{
 						EditNumberOfPiecesInALine(x, y);
 						if (CheckForWin()) return;
 					}
-					_currentNumberOfPiecesInALine = 0;
 				}
 			}
 
@@ -126,12 +126,12 @@ namespace DannyG
 			{
 				for (int x = 0; x < _board.GetLength(0); x++)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					for (int y = 0; y < _board.GetLength(1); y++)
 					{
 						EditNumberOfPiecesInALine(x, y);
 						if (CheckForWin()) return;
 					}
-					_currentNumberOfPiecesInALine = 0;
 				}
 			}
 
@@ -143,6 +143,7 @@ namespace DannyG
 				
 				for (int y = cutOff; y < yLength; y++)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					int row = y;
 					int col = 0;
 					while (row >= 0)
@@ -155,6 +156,7 @@ namespace DannyG
 				}
 				for (int x = 1; x < xLength - cutOff; x++)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					int row = yLength - 1;
 					int col = x;
 					while (col < xLength)
@@ -175,6 +177,7 @@ namespace DannyG
 				
 				for (int y = cutOff; y < yLength; y++)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					int row = y;
 					int col = xLength - 1;
 					while (row >= 0)
@@ -187,6 +190,7 @@ namespace DannyG
 				}
 				for (int x = xLength - 2; x >= cutOff; x--)
 				{
+					_currentNumberOfPiecesInALine = 0;
 					int row = yLength - 1;
 					int col = x;
 					while (col >= 0)
