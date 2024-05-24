@@ -85,9 +85,17 @@ namespace DannyG
 			{
 				Piece currentPiece = _pieces[coordinate];
 				_pieces.Remove(coordinate);
-				coordinate.Increment(shiftAmount);
-				_pieces.Add(coordinate, currentPiece);
-				currentPiece.SetCoordinate(coordinate);
+				Coordinate newCoordinate = new Coordinate(coordinate.x, coordinate.y);
+				newCoordinate.Increment(shiftAmount);
+				try
+				{
+					_pieces.Add(newCoordinate, currentPiece);
+				}
+				catch (Exception e)
+				{
+					Debug.LogError($"Dictionary argument exception\nOld Coordinate: {coordinate.ToString()} | New Coordinate: {newCoordinate.ToString()}");
+				}
+				currentPiece.SetCoordinate(newCoordinate);
 				return currentPiece;
 			}
 		}

@@ -56,6 +56,11 @@ namespace DannyG
             x += incrementor.x;
             y += incrementor.y;
         }
+
+        public override string ToString()
+        {
+            return $"{x}, {y}";
+        }
     }
     public static class CoordinateExtension
     {

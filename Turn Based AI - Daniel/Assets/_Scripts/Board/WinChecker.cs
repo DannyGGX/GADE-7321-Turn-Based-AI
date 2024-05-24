@@ -45,22 +45,27 @@ namespace DannyG
 		private async Task StartOfWinCheck()
 		{
 			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
-			_board = BoardStateManager.Instance.grid;
 			await Task.Yield(); // wait for board state to update // make sure that the board display update event is sent after this method
+			_board = BoardStateManager.Instance.grid;
 		}
 		
 		private async void CheckForWinAroundPiece(MoveData moveData)
 		{
 			await StartOfWinCheck();
 			
-			CheckForWinOnWholeBoard(new AllShiftedTilesData()); // temporary while the other algorithm is not implemented
+			WholeBoardWinCheck(); // temporary while the other algorithm is not implemented
 			//Check after checking for win
 			CheckForDraw();
 		}
 		
 		private async void CheckForWinOnWholeBoard(AllShiftedTilesData allShiftedTiles)
 		{
-			//await StartOfWinCheck(); // temporary while the other algorithm is not implemented
+			await StartOfWinCheck(); // temporary while the other algorithm is not implemented
+			WholeBoardWinCheck();
+		}
+
+		private void WholeBoardWinCheck()
+		{
 			_currentNumberOfPiecesInALine = 0;
 			bool isPlayer1Line = default;
 			
