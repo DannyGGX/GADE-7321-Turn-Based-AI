@@ -26,7 +26,7 @@ namespace DannyG
 		private PlayerController CreatePlayer(PlayerType playerType, PlayerId playerId)
 		{
 			PlayerController playerController;
-			var obj = new GameObject(playerType.ToString());
+			var obj = new GameObject(playerType + playerId.ToString());
 			
 			if (playerType == PlayerType.Human)
 			{
@@ -42,18 +42,10 @@ namespace DannyG
 		
 		private void StartTurn(PlayerId playerId)
 		{
-			Debug.Log("Player manager received start turn event: " + playerId);
-			switch (playerId)
-			{
-				case PlayerId.Player1:
-					_player1Controller.StartTurn();
-					break;
-				case PlayerId.Player2:
-					_player2Controller.StartTurn();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(playerId), playerId, null);
-			}
+			if (playerId == PlayerId.Player1)
+				_player1Controller.StartTurn();
+			else
+				_player2Controller.StartTurn();
 		}
 	}
 }

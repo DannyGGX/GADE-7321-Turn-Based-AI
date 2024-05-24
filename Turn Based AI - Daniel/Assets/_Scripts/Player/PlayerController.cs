@@ -17,15 +17,6 @@ namespace DannyG
 			PlayerData = new PlayerData(id, type);
 			ValidMovesCalculator = new ValidMovesCalculator();
 		}
-		
-		private void OnEnable()
-		{
-			
-		}
-		private void OnDisable()
-		{
-			
-		}
 
 		public virtual void StartTurn()
 		{

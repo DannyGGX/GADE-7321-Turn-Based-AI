@@ -9,9 +9,18 @@ namespace DannyG
 	public class GameSetupDataSO : ScriptableObject
 	{
 		// Player data
-		public PlayerId startingPlayer { get; set; }
-		public PlayerType player1Type { get; set; }
-		public PlayerType player2Type { get; set; }
+		[field: SerializeField] public PlayerId startingPlayer { get; set; }
+		[field: SerializeField] public PlayerType player1Type { get; set; }
+		[field: SerializeField] public PlayerType player2Type { get; set; }
+		
+		// AI data
+		public DifficultyLevelsDataSO difficultyLevelsData;
+
+		/// <summary>
+		/// Player 1 index is 0, player 2 index is 1
+		/// </summary>
+		public DifficultyNames[] playerDifficulties = 
+			new DifficultyNames[2] { DifficultyNames.Easy, DifficultyNames.Easy };
 		
 		// Board data
 		public int[,] startingGrid { get; set; }
@@ -20,6 +29,7 @@ namespace DannyG
 		public Dictionary<GravityStates, Vector3[]> startingPositions { get; private set; }
 		
 		public TileDisplayFactorySO tileFactory;
+
 		
 		// Board input data
 		[SerializeField] private Vector3 centerPosition = Vector3.zero;

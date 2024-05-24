@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c42b7fb0a8d15e4b83ab58b874b1850, type: 3}
   m_Name: Game Setup Data
   m_EditorClassIdentifier: 
+  <startingPlayer>k__BackingField: 2
+  <player1Type>k__BackingField: 0
+  <player2Type>k__BackingField: 0
+  difficultyLevelsData: {fileID: 11400000, guid: 63eb6c0c464f60e49b7c093bf13899fb, type: 2}
+  playerDifficulties: 0000000000000000
   tileFactory: {fileID: 11400000, guid: 04d212b419612c24baaf13ce1ce898fd, type: 2}
   centerPosition: {x: 0, y: 0, z: 0}
   frameWidth: 10
