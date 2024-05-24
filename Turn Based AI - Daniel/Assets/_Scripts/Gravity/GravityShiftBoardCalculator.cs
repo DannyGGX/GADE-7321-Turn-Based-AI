@@ -218,7 +218,7 @@ namespace DannyG
 				{
 					_incrementor = 1;
 					_targetDimensionStartIndex = 0;
-					_targetDimensionEndIndex = _targetDimensionLength - 1;
+					_targetDimensionEndIndex = _targetDimensionLength;
 					_endCondition = ForwardLoopEndCondition;
 				}
 			}

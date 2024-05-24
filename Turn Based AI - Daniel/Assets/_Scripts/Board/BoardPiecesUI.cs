@@ -60,6 +60,13 @@ namespace DannyG
 		private async void ShiftPieces(AllShiftedTilesData allShiftedTiles)
 		{
 			await Task.Yield(); // wait for board state to update before removing furthest piece
+			if (allShiftedTiles.listOfShiftedTiles.Count == 0) // check if no pieces are to be shifted
+			{
+				await Task.Yield(); // wait for win checker to check for win
+				OnPieceFinishedMoving();
+				return;
+			}
+			
 			Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
 			Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
 			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
