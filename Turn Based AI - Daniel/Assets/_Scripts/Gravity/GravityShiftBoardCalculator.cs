@@ -103,6 +103,11 @@ namespace DannyG
 							break;
 					}
 				}
+				if (currentLine.count > 0) // this is done to try stop pieces from sticking to the edge of the board
+				{
+					_allShiftedTilesData.AddLine(currentLine);
+					currentLine = new ShiftTilesLine(default);
+				}
 			}
 
 			void LookForLandingPosition()
