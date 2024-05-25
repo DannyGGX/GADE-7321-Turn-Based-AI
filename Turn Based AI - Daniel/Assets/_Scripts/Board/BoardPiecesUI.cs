@@ -67,9 +67,8 @@ namespace DannyG
 				return;
 			}
 			
-			Coordinate coordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var shiftAmount);
-			Piece piece = ChangePieceCoordinate(coordinate, shiftAmount);
-			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
+			Piece piece;
+			Coordinate furthestCoordinate = allShiftedTiles.GetPieceWithLongestTravelAndRemoveItFromList(out var furthestShiftAmount);
 			
 			foreach (var line in allShiftedTiles.listOfShiftedTiles)
 			{
@@ -79,6 +78,14 @@ namespace DannyG
 					MovePiece(piece, piece.coordinate, DoNothing);
 				}
 			}
+			
+			// Move furthest piece afterwards to avoid having duplicate keys in the dictionary.
+			// Duplicate keys exception happened when the furthest piece lands on another piece
+			// before that piece has moved in the current gravity shift.
+			piece = ChangePieceCoordinate(furthestCoordinate, furthestShiftAmount);
+			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
+			Debug.Log($"First moved piece: Old Coordinate: {furthestCoordinate} | New Coordinate: {piece.coordinate}");
+			
 			return;
 			
 			Piece ChangePieceCoordinate(Coordinate coordinate, Incrementor2D shiftAmount)
