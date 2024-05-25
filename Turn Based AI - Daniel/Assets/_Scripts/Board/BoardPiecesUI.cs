@@ -84,7 +84,6 @@ namespace DannyG
 			// before that piece has moved in the current gravity shift.
 			piece = ChangePieceCoordinate(furthestCoordinate, furthestShiftAmount);
 			MovePiece(piece, piece.coordinate, OnPieceFinishedMoving);
-			Debug.Log($"First moved piece: Old Coordinate: {furthestCoordinate} | New Coordinate: {piece.coordinate}");
 			
 			return;
 			
@@ -92,17 +91,9 @@ namespace DannyG
 			{
 				Piece currentPiece = _pieces[coordinate];
 				_pieces.Remove(coordinate);
-				Coordinate newCoordinate = new Coordinate(coordinate.x, coordinate.y);
-				newCoordinate.Increment(shiftAmount);
-				try
-				{
-					_pieces.Add(newCoordinate, currentPiece);
-				}
-				catch (Exception e)
-				{
-					Debug.LogError($"Dictionary argument exception\nOld Coordinate: {coordinate.ToString()} | New Coordinate: {newCoordinate.ToString()}");
-				}
-				currentPiece.SetCoordinate(newCoordinate);
+				coordinate.Increment(shiftAmount);
+				_pieces.Add(coordinate, currentPiece);
+				currentPiece.SetCoordinate(coordinate);
 				return currentPiece;
 			}
 		}
