@@ -20,10 +20,5 @@ namespace DannyG
             
         }
     }
-
-    public class BoardState
-    {
-        
-    }
     
 }
