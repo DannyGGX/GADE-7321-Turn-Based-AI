@@ -7,7 +7,6 @@ namespace DannyG._Scripts.Scenes
         protected override void Awake()
         {
             base.Awake();
-            SetupMenuManager.Instance.CreateGameSetupData();
             SetupDataLocator.Init();
             GravityManager.Init();
         }

@@ -17,6 +17,8 @@ MonoBehaviour:
   <player2Type>k__BackingField: 0
   difficultyLevelsData: {fileID: 11400000, guid: 63eb6c0c464f60e49b7c093bf13899fb, type: 2}
   playerDifficulties: 0000000000000000
+  _mapPresets: {fileID: 11400000, guid: 95cb236221be08e4a994b20a54b91e44, type: 2}
+  <ChosenMapIndex>k__BackingField: -1
   tileFactory: {fileID: 11400000, guid: 04d212b419612c24baaf13ce1ce898fd, type: 2}
   centerPosition: {x: 0, y: 0, z: 0}
   frameWidth: 10

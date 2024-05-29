@@ -17,9 +17,19 @@ namespace DannyG
 			_mapList.Add(_map2);
 			//_mapList.Add(_map4); // test board with odd number of rows and columns
 		}
-		public int[,] ChooseRandomMap()
+
+		/// <summary>
+		/// Choose a map equal to the index. Index is dependent on where a given map is in the hashset
+		/// </summary>
+		/// <param name="index"> Pass -1 to choose a random map </param>
+		/// <returns></returns>
+		public int[,] ChooseMap(int index)
 		{
-			return _mapList.ElementAt(Random.Range(0, _mapList.Count));
+			if (index == -1)
+			{
+				index = Random.Range(0, _mapList.Count);
+			}
+			return _mapList.ElementAt(index);
 		}
 		
 		private readonly int[,] _map0 =
