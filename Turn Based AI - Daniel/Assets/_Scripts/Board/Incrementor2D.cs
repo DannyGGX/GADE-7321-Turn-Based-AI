@@ -15,6 +15,11 @@ namespace DannyG
 			this.y = y;
 		}
 
+		public Incrementor2D(Coordinate coordinateA, Coordinate coordinateB)
+		{
+			this = Incrementor2DExtensions.CreateWithDifferenceInCoordinates(coordinateA, coordinateB);
+		}
+
 		public void SetOpposite()
 		{
 			x = x * -1;
@@ -41,6 +46,8 @@ namespace DannyG
 		{
 			return Math.Abs(x) + Math.Abs(y);
 		}
+
+		
 	}
 	public static class Incrementor2DExtensions
 	{
@@ -72,6 +79,13 @@ namespace DannyG
 				< 0 => -1,
 				_ => 0
 			};
+		}
+		
+		public static Incrementor2D CreateWithDifferenceInCoordinates(Coordinate coordinateA, Coordinate coordinateB)
+		{
+			Coordinate result = new Coordinate();
+			result.Update(coordinateA - coordinateB);
+			return result.ToIncrementor2D();
 		}
 	}
 }

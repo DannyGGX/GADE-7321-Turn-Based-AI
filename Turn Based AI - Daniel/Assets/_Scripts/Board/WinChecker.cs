@@ -28,7 +28,7 @@ namespace DannyG
 		}
 		private void CalculateMaxMoveNumber()
 		{
-			_board = BoardStateManager.Instance.grid;
+			_board = BoardStateManager.grid;
 			_maxMoveNumber = 0;
 			for (var y = 0; y < _board.GetLength(1); y++)
 			{
@@ -46,7 +46,7 @@ namespace DannyG
 		{
 			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
 			await Task.Yield(); // wait for board state to update // make sure that the board display update event is sent after this method
-			_board = BoardStateManager.Instance.grid;
+			_board = BoardStateManager.grid;
 		}
 		
 		private async void CheckForWinAroundPiece(MoveData moveData)

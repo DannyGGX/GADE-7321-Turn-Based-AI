@@ -10,9 +10,10 @@ namespace DannyG
 	
 	public class BoardStateManager : Singleton<BoardStateManager>
 	{
-		public int[,] grid => _boardState.grid;
+		public static int[,] grid => _boardState.grid;
 
-		private BoardState _boardState;
+		private static BoardState _boardState;
+		public static BoardState boardState => _boardState;
 
 		private void OnEnable()
 		{

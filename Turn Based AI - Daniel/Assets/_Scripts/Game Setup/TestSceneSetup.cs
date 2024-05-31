@@ -16,7 +16,7 @@ namespace DannyG
 		{
 			GameSetupDataSO gameSetupData = Resources.Load<GameSetupDataSO>("Game Setup Data");
 
-			gameSetupData.ChosenMapIndex = -1;
+			gameSetupData.ChosenMapIndex = 3;
 			gameSetupData.SelectRandomStartingPlayer();
 			gameSetupData.player1Type = PlayerType.Human;
 			gameSetupData.player2Type = PlayerType.Human;

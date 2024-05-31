@@ -45,7 +45,7 @@ namespace DannyG
 		/// <param name="validMoves"></param>
 		private List<Coordinate> ForEachColumnOrderedTopToBottom()
 		{
-			int[,] grid = BoardStateManager.Instance.grid;
+			int[,] grid = BoardStateManager.grid;
 
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
@@ -75,7 +75,7 @@ namespace DannyG
 		
 		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
-			_grid = BoardStateManager.Instance.grid;
+			_grid = BoardStateManager.grid;
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
 

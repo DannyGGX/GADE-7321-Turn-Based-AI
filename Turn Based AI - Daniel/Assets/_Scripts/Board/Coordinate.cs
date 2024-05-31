@@ -11,6 +11,11 @@ namespace DannyG
             this.x = x;
             this.y = y;
         }
+        public Coordinate(Coordinate coordinate)
+        {
+            this.x = coordinate.x;
+            this.y = coordinate.y;
+        }
 
         #region Operations
 
@@ -45,10 +50,15 @@ namespace DannyG
 
         #endregion
         
-        public void Update(int x, int y)
+        public void Update(int x = 0, int y = 0)
         {
             this.x = x;
             this.y = y;
+        }
+        public void Update(Coordinate coordinate)
+        {
+            this.x = coordinate.x;
+            this.y = coordinate.y;
         }
 
         public void Increment(Incrementor2D incrementor)
@@ -72,6 +82,14 @@ namespace DannyG
         {
             coordinate.x = -1;
             coordinate.y = -1;
+        }
+
+        public static Coordinate WithUpdatedValues(this Coordinate coordinate, int x = 0, int y = 0)
+        {
+            Coordinate result = new Coordinate();
+            result.Update(coordinate.x + x, coordinate.y + y);
+            return result;
+            
         }
     }
 }

@@ -46,7 +46,7 @@ namespace DannyG
 		{
 			GravityManager.NextGravityState();
 			
-			_grid = BoardStateManager.Instance.grid;
+			_grid = BoardStateManager.grid;
 			GravityStates currentGravityState = GravityManager.currentGravityState;
 			switch (currentGravityState)
 			{

@@ -15,7 +15,7 @@ namespace DannyG
 			_mapList.Add(_map0);
 			_mapList.Add(_map1);
 			_mapList.Add(_map2);
-			//_mapList.Add(_map4); // test board with odd number of rows and columns
+			_mapList.Add(_map5);
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace DannyG
 			{ 0, 0, 0, 0, 0, 0, 0, 3, 3, 3 },
 			{ 0, 3, 0, 0, 0, 0, 3, 3, 3, 3 },
 		};
-		private readonly int[,] _map3 =
+		private readonly int[,] _map3 = // blank
 		{
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -85,7 +85,7 @@ namespace DannyG
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 		};
-		private readonly int[,] _map4 =
+		private readonly int[,] _map4 = // 9 by 9 to test centering of board with odd number of tiles
 		{
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -96,6 +96,19 @@ namespace DannyG
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		};
+		private readonly int[,] _map5 =
+		{
+			{ 3, 3, 3, 3, 3, 0, 3, 3, 3, 3 },
+			{ 3, 3, 3, 3, 0, 0, 0, 3, 3, 3 },
+			{ 3, 3, 3, 0, 0, 0, 0, 0, 3, 3 },
+			{ 3, 3, 0, 0, 0, 0, 0, 0, 0, 3 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 3, 3 },
+			{ 3, 3, 0, 0, 0, 0, 0, 3, 3, 3 },
+			{ 3, 3, 3, 0, 0, 0, 3, 3, 3, 3 },
+			{ 3, 3, 3, 3, 0, 3, 3, 3, 3, 3 },
 		};
 	}
 }

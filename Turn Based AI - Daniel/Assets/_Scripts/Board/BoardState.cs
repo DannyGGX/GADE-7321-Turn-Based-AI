@@ -69,5 +69,14 @@ namespace DannyG
 			return left?.grid != right?.grid;
 		}
 
+		public TileType GetTileTypeAt(Coordinate coordinate)
+		{
+			return (TileType)grid[coordinate.x, coordinate.y];
+		}
+		
+		public bool IsInBounds(Coordinate coordinate)
+		{
+			return coordinate is { x: >= 0, y: >= 0 } && coordinate.x < grid.GetLength(0) && coordinate.y < grid.GetLength(1);
+		}
     }
 }
