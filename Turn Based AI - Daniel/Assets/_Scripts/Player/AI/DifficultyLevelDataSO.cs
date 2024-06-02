@@ -9,7 +9,6 @@ namespace DannyG
     public class DifficultyLevelsDataSO : ScriptableObject
     {
         public DifficultyLevel[] DifficultyLevels = new DifficultyLevel[2];
-        [HideInInspector] public DifficultyLevel selectedDifficulty;
 
         public DifficultyLevel GetDifficultyLevel(DifficultyNames difficultyName)
         {

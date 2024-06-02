@@ -25,9 +25,10 @@ namespace DannyG
 
 		protected override async void MakeAMove(Coordinate placeToMove)
 		{
+			// Check that the correct human made the move, as both humans register this same callback method to the buttons.
 			if (TurnManager.Instance.currentPlayer != PlayerData.PlayerId) return;
-			// If there are 2 instances of this class and the buttons for the input subscribe this method callback, then this will be called twice.
 			
+			// Wait a frame so that the buttons aren't immediately disabled before the input is registered.
 			await Task.Yield();
 			BoardInput.Instance.DisableButtons();
 			base.MakeAMove(placeToMove);

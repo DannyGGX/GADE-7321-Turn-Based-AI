@@ -21,8 +21,9 @@ namespace DannyG
 
 		/// <summary>
 		/// Player 1 index is 0, player 2 index is 1
+		/// There are 2 difficulties so that I can have 2 AIs verse each other.
 		/// </summary>
-		public DifficultyNames[] playerDifficulties = 
+		[FormerlySerializedAs("playerDifficulties")] public DifficultyNames[] selectedDifficulties = 
 			new DifficultyNames[2] { DifficultyNames.Easy, DifficultyNames.Easy };
 
 		[Header("Map Data")]
@@ -35,6 +36,10 @@ namespace DannyG
 		public int[,] startingGrid { get; private set; }
 		public Vector3[,] tileCenterPositions { get; private set; }
 		public float overallScaleModifier { get; private set; }
+		
+		/// <summary>
+		/// Positions at the edges of the board from which the pieces spawn and "fall" from depending on the gravity state.
+		/// </summary>
 		public Dictionary<GravityStates, Vector3[]> startingPositions { get; private set; }
 		
 		public TileDisplayFactorySO tileFactory;

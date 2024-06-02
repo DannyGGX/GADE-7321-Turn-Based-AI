@@ -23,7 +23,6 @@ namespace DannyG
         private void ButtonClicked(Action<Coordinate> buttonCallback)
         {
             buttonCallback.Invoke(_coordinate);
-            this.Log("Button Clicked");
         }
         
         

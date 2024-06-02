@@ -13,7 +13,7 @@ namespace DannyG
 		private void SetDifficultyLevel()
 		{
 			int playerIdToArrayIndex = (int)PlayerData.PlayerId - 1;
-			DifficultyNames difficultyName = SetupDataLocator.GameSetupData.playerDifficulties[playerIdToArrayIndex];
+			DifficultyNames difficultyName = SetupDataLocator.GameSetupData.selectedDifficulties[playerIdToArrayIndex];
 			DifficultyLevelsDataSO difficultyLevelsData = SetupDataLocator.GameSetupData.difficultyLevelsData;
 			_difficultyLevel = difficultyLevelsData.GetDifficultyLevel(difficultyName);
 		}
