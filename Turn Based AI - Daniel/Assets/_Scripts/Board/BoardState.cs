@@ -2,7 +2,7 @@ using System.Text;
 
 namespace DannyG
 {
-    public class BoardState
+    public struct BoardState
     {
         public int[,] grid { get; set; }
         
@@ -14,6 +14,7 @@ namespace DannyG
         public void ShiftPieces(AllShiftedTilesData allShiftedTiles)
         {
         	int[] currentLineOfTileData;
+	        var state = this;
         	
         	foreach (var line in allShiftedTiles.listOfShiftedTiles)
         	{
@@ -27,8 +28,9 @@ namespace DannyG
         		}
         		PlaceTiles(line);
         	}
+			return;
 
-        	void PlaceTiles(ShiftTilesLine line)
+	        void PlaceTiles(ShiftTilesLine line)
         	{
         		Incrementor2D incrementor = line.shiftAmount.Normalize();
         		incrementor.SetOpposite();
@@ -38,7 +40,7 @@ namespace DannyG
 
         		for (int index = 0; index < line.count; index++)
         		{
-        			grid[currentCoordinate.x, currentCoordinate.y] = currentLineOfTileData[index];
+			        state.grid[currentCoordinate.x, currentCoordinate.y] = currentLineOfTileData[index];
         			currentCoordinate.Increment(incrementor);
         		}
         	}
@@ -62,11 +64,11 @@ namespace DannyG
         
 		public static bool operator ==(BoardState left, BoardState right)
 		{
-			return left?.grid == right?.grid;
+			return left.grid == right.grid;
 		}
 		public static bool operator !=(BoardState left, BoardState right)
 		{
-			return left?.grid != right?.grid;
+			return left.grid != right.grid;
 		}
 
 		public TileType GetTileTypeAt(Coordinate coordinate)

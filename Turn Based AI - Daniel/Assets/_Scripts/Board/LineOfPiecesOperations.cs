@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DannyG
 {
 	
-	public class LineOfPiecesOperations
+	public static class LineOfPiecesOperations
 	{
 		/// <summary>
 		/// 
@@ -15,7 +15,7 @@ namespace DannyG
 		/// <param name="centerCoordinate"></param>
 		/// <param name="boardState"></param>
 		/// <returns> List of coordinates of pieces with the same tile type as the center coordinate </returns>
-		public List<Coordinate> GetNeighboringCoordinatesOfSameTileType(Coordinate centerCoordinate, BoardState boardState)
+		public static List<Coordinate> GetNeighboringCoordinatesOfSameTileType(Coordinate centerCoordinate, BoardState boardState)
 		{
 			TileType targetTileType = boardState.GetTileTypeAt(centerCoordinate);
 			HashSet<Coordinate> possibleCoordinates = GetPossibleCoordinatesAroundCenterCoordinate();
@@ -87,7 +87,7 @@ namespace DannyG
 		/// <param name="nextCoordinate"> The coordinate next to the center coordinate </param>
 		/// <param name="boardState"></param>
 		/// <returns> Number of tiles with the same tile type as the center coordinate. returns values 2 to 4 </returns>
-		public int GetNumberOfSameTilesInALine(Coordinate centerCoordinate, Coordinate nextCoordinate, 
+		public static int GetNumberOfSameTilesInALine(Coordinate centerCoordinate, Coordinate nextCoordinate, 
 			BoardState boardState)
 		{
 			TileType targetTileType = boardState.GetTileTypeAt(centerCoordinate);
@@ -128,6 +128,31 @@ namespace DannyG
 					}
 				}
 			}
+		}
+
+		public static int GetLongestLineOfTilesInArea(Coordinate centerCoordinate, BoardState boardState)
+		{
+			var result = 1;
+			const int cutOff = 4;
+			List<Coordinate> neighboringCoordinates = GetNeighboringCoordinatesOfSameTileType(centerCoordinate, boardState);
+			if(neighboringCoordinates.Count == 0)
+			{
+				return result;
+			}
+
+			foreach (var coordinate in neighboringCoordinates)
+			{
+				int currentLineCount = GetNumberOfSameTilesInALine(centerCoordinate, coordinate, boardState);
+				if (currentLineCount >= cutOff)
+				{
+					return currentLineCount;
+				}
+				if (currentLineCount > result)
+				{
+					result = currentLineCount;
+				}
+			}
+			return result;
 		}
 		
 	}

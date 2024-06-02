@@ -52,9 +52,12 @@ namespace DannyG
 		private async void CheckForWinAroundPiece(MoveData moveData)
 		{
 			await StartOfWinCheck();
-			
-			WholeBoardWinCheck(); // temporary while the other algorithm is not implemented
-			//Check after checking for win
+			if (LineOfPiecesOperations.GetLongestLineOfTilesInArea(moveData.Coordinate, BoardStateManager.boardState) >= 4)
+			{
+				EventManager.onPlayerWin.Invoke(moveData.PlayerId);
+				return;
+			}
+			//Check for draw after checking for win
 			CheckForDraw();
 		}
 		
