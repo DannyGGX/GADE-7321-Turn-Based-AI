@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace DannyG
@@ -25,11 +27,19 @@ namespace DannyG
 		/// <returns></returns>
 		public int[,] ChooseMap(int index)
 		{
-			if (index == -1)
+			try
 			{
-				index = Random.Range(0, _mapList.Count);
+				if (index == -1)
+				{
+					index = Random.Range(0, _mapList.Count);
+				}
+				return _mapList.ElementAt(index);
 			}
-			return _mapList.ElementAt(index);
+			catch (Exception e)
+			{
+				Debug.LogError($"Map Index out of range.\nIndex: {index}\nMaps Count: {_mapList.Count}|\nException: {e}");
+				return _mapList.ElementAt(0);
+			}
 		}
 		
 		private readonly int[,] _map0 =

@@ -28,7 +28,8 @@ namespace DannyG
 
 		[Header("Map Data")]
 		[SerializeField] private MapPresetsSO _mapPresets;
-
+		[HideInInspector] public MapPresetsSO mapPresets => _mapPresets;
+		
 		[field: SerializeField, Min(-1), Tooltip("-1 for random map")] 
 		public int ChosenMapIndex { get; set; } = -1;
 		
@@ -55,14 +56,7 @@ namespace DannyG
 		public void Init()
 		{
 			_mapPresets.Init();
-			try
-			{
-				startingGrid = _mapPresets.ChooseMap(ChosenMapIndex);
-			}
-			catch (Exception e)
-			{
-				Debug.LogError("Map Index out of range. Index: " + ChosenMapIndex);
-			}
+			startingGrid = _mapPresets.ChooseMap(ChosenMapIndex);
 			
 			BoardDisplayData boardDisplayData = new BoardDisplayData
 			(
