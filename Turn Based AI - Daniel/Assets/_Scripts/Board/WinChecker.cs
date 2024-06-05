@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityUtils;
@@ -12,7 +13,6 @@ namespace DannyG
 		
 		private int[,] _board;
 		private int _maxMoveNumber;
-		private int _currentNumberOfPiecesInALine;
 
 
 		private void Start()
@@ -64,19 +64,24 @@ namespace DannyG
 		private async void CheckForWinOnWholeBoard(AllShiftedTilesData allShiftedTiles)
 		{
 			await StartOfWinCheck(); // temporary while the other algorithm is not implemented
-			WholeBoardWinCheck();
+			WholeBoardWinCheck(BoardStateManager.boardState);
 		}
 
-		private void WholeBoardWinCheck()
+		public bool WholeBoardWinCheck(BoardState boardState)
 		{
-			_currentNumberOfPiecesInALine = 0;
+			_board = boardState.grid;
+			int currentNumberOfPiecesInALine = 0;
 			bool isPlayer1Line = default;
+			bool isThereAWinner = false;
 			
-			LoopHorizontally();
-			LoopVertically();
-			LoopForwardDiagonally();
-			LoopBackwardsDiagonally();
-			return;
+			isThereAWinner = LoopHorizontally();
+			if (isThereAWinner) return true;
+			isThereAWinner = LoopVertically();
+			if (isThereAWinner) return true;
+			isThereAWinner = LoopForwardDiagonally();
+			if (isThereAWinner) return true;
+			isThereAWinner = LoopBackwardsDiagonally();
+			return isThereAWinner;
 
 			void EditNumberOfPiecesInALine(int currentX, int currentY)
 			{
@@ -84,32 +89,32 @@ namespace DannyG
 				{
 					case (int)TileType.Empty:
 					case (int)TileType.Blocker:
-						_currentNumberOfPiecesInALine = 0;
+						currentNumberOfPiecesInALine = 0;
 						break;
 					case (int)TileType.Player1Token:
-						if (isPlayer1Line == false || _currentNumberOfPiecesInALine == 0)
+						if (isPlayer1Line == false || currentNumberOfPiecesInALine == 0)
 						{
-							_currentNumberOfPiecesInALine = 1;
+							currentNumberOfPiecesInALine = 1;
 							isPlayer1Line = true;
 						}
 						else
-							_currentNumberOfPiecesInALine++;
+							currentNumberOfPiecesInALine++;
 						break;
 					case (int)TileType.Player2Token:
-						if (isPlayer1Line || _currentNumberOfPiecesInALine == 0)
+						if (isPlayer1Line || currentNumberOfPiecesInALine == 0)
 						{
-							_currentNumberOfPiecesInALine = 1;
+							currentNumberOfPiecesInALine = 1;
 							isPlayer1Line = false;
 						}
 						else
-							_currentNumberOfPiecesInALine++;
+							currentNumberOfPiecesInALine++;
 						break;
 				}
 			}
 
 			bool CheckForWin()
 			{
-				if (_currentNumberOfPiecesInALine == 4)
+				if (currentNumberOfPiecesInALine == 4)
 				{
 					EventManager.onPlayerWin.Invoke(isPlayer1Line ? PlayerId.Player1 : PlayerId.Player2);
 					return true;
@@ -117,33 +122,35 @@ namespace DannyG
 				return false;
 			}
 
-			void LoopHorizontally()
+			bool LoopHorizontally()
 			{
 				for (int y = 0; y < _board.GetLength(1); y++)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					for (int x = 0; x < _board.GetLength(0); x++)
 					{
 						EditNumberOfPiecesInALine(x, y);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 					}
 				}
+				return false;
 			}
 
-			void LoopVertically()
+			bool LoopVertically()
 			{
 				for (int x = 0; x < _board.GetLength(0); x++)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					for (int y = 0; y < _board.GetLength(1); y++)
 					{
 						EditNumberOfPiecesInALine(x, y);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 					}
 				}
+				return false;
 			}
 
-			void LoopForwardDiagonally() // diagonally like a forward slash
+			bool LoopForwardDiagonally() // diagonally like a forward slash
 			{
 				int xLength = _board.GetLength(0);
 				int yLength = _board.GetLength(1);
@@ -151,33 +158,34 @@ namespace DannyG
 				
 				for (int y = cutOff; y < yLength; y++)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					int row = y;
 					int col = 0;
 					while (row >= 0)
 					{
 						EditNumberOfPiecesInALine(row, col);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 						row--;
 						col++;
 					}
 				}
 				for (int x = 1; x < xLength - cutOff; x++)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					int row = yLength - 1;
 					int col = x;
 					while (col < xLength)
 					{
 						EditNumberOfPiecesInALine(row, col);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 						row--;
 						col++;
 					}
 				}
+				return false;
 			}
 			
-			void LoopBackwardsDiagonally() // diagonally like a back slash
+			bool LoopBackwardsDiagonally() // diagonally like a back slash
 			{
 				int xLength = _board.GetLength(0);
 				int yLength = _board.GetLength(1);
@@ -185,30 +193,31 @@ namespace DannyG
 				
 				for (int y = cutOff; y < yLength; y++)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					int row = y;
 					int col = xLength - 1;
 					while (row >= 0)
 					{
 						EditNumberOfPiecesInALine(row, col);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 						row--;
 						col--;
 					}
 				}
 				for (int x = xLength - 2; x >= cutOff; x--)
 				{
-					_currentNumberOfPiecesInALine = 0;
+					currentNumberOfPiecesInALine = 0;
 					int row = yLength - 1;
 					int col = x;
 					while (col >= 0)
 					{
 						EditNumberOfPiecesInALine(row, col);
-						if (CheckForWin()) return;
+						if (CheckForWin()) return true;
 						row--;
 						col--;
 					}
 				}
+				return false;
 			}
 		}
 		
@@ -219,6 +228,12 @@ namespace DannyG
 			{
 				EventManager.onDrawGame.Invoke();
 			}
+		}
+
+		public static bool IsDrawState(BoardState boardState)
+		{
+			// Check if there are no empty tiles in the grid
+			return ((IList)boardState.grid).Contains((int)TileType.Empty) == false;
 		}
 
 	}

@@ -22,7 +22,7 @@ namespace DannyG
 		{
 			base.Initialize(id, type);
 			SetDifficultyLevel();
-			_minimax = new Minimax(_difficultyLevel.maxDepth, ValidMovesCalculator);
+			_minimax = new Minimax(_difficultyLevel.maxDepth, ValidMovesCalculator, PlayerData.PlayerId);
 		}
 
 

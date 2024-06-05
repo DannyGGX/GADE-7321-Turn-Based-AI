@@ -12,6 +12,11 @@ namespace DannyG
         {
         	grid[moveData.Coordinate.x, moveData.Coordinate.y] = (int)moveData.PlayerId;
         }
+        
+        public void RemovePieceAt(Coordinate coordinate)
+        {
+	        grid[coordinate.x, coordinate.y] = (int)TileType.Empty;
+        }
         		
         public void ShiftPieces(AllShiftedTilesData allShiftedTiles)
         {

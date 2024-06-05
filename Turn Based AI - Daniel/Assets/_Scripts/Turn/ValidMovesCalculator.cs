@@ -25,8 +25,10 @@ namespace DannyG
 		private delegate bool LoopEndCondition(int index);
 		private LoopEndCondition _endCondition;
 
-		public List<Coordinate> GetValidMoves()
+		public List<Coordinate> GetValidMoves(BoardState? boardState = null)
 		{
+			_grid = boardState?.grid ?? BoardStateManager.grid;
+			
 			return GravityManager.currentGravityState switch
 			{
 				GravityStates.Down => CalculateValidMoves(false, true),
@@ -75,7 +77,6 @@ namespace DannyG
 		
 		private List<Coordinate> CalculateValidMoves(bool inXDimension, bool inReverseLoop)
 		{
-			_grid = BoardStateManager.grid;
 			var validMoves = new List<Coordinate>();
 			var currentValidMove = new Coordinate();
 
