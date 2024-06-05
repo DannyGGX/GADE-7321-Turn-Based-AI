@@ -39,12 +39,7 @@ namespace DannyG
 					centerCoordinate.WithUpdatedValues(-1, 1),
 					centerCoordinate.WithUpdatedValues(-1, -1)
 				};
-
-				// Remove coordinates that are out of bounds
-				foreach (var coordinate in result.Where(coordinate => boardState.IsInBounds(coordinate) == false))
-				{
-					result.Remove(coordinate);
-				}
+				boardState.RemoveAllThatAreOutOfBounds(ref result);
 				return result;
 			}
 
@@ -60,20 +55,19 @@ namespace DannyG
 
 			void RemoveOppositeCoordinates()
 			{
-				foreach (var oppositeCoordinate in resultCoordinates.Select(GetOppositeCenterNeighbor))
-				{
-					if (resultCoordinates.Contains(oppositeCoordinate))
-					{
-						resultCoordinates.Remove(oppositeCoordinate);
-					}
-				}
+				resultCoordinates = resultCoordinates
+					.Where
+					(
+						coordinate => coordinate != GetOppositeCenterNeighbor(coordinate)
+					)
+					.ToList();
+				
 				return;
 				
 				Coordinate GetOppositeCenterNeighbor(Coordinate coordinate1)
 				{
 					var result = new Coordinate(centerCoordinate);
 					Incrementor2D incrementor = new Incrementor2D(centerCoordinate, coordinate1);
-					incrementor.SetOpposite();
 					result.Increment(incrementor);
 					return result;
 				}

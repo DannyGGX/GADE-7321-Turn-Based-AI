@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DannyG
@@ -79,6 +81,19 @@ namespace DannyG
 		public bool IsInBounds(Coordinate coordinate)
 		{
 			return coordinate is { x: >= 0, y: >= 0 } && coordinate.x < grid.GetLength(0) && coordinate.y < grid.GetLength(1);
+		}
+
+		public void RemoveAllThatAreOutOfBounds(ref HashSet<Coordinate> coordinates)
+		{
+			var state = this;
+			coordinates = coordinates
+				.Where // keep only coordinates that are in bounds
+				(
+					coordinate => 
+						coordinate.x >= 0 && coordinate.x < state.grid.GetLength(0) 
+				    &&  coordinate.y >= 0 && coordinate.y < state.grid.GetLength(1)
+				)
+				.ToHashSet();
 		}
     }
 }
