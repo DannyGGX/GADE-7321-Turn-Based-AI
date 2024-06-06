@@ -35,20 +35,24 @@ namespace DannyG
 
 		private void OnEnable()
 		{
-			EventManager.onGravityShift.Subscribe(ShiftGravity);
+			EventManager.onGravityShift.Subscribe(ReceiveShiftGravityEvent);
 		}
 		private void OnDisable()
 		{
-			EventManager.onGravityShift.Unsubscribe(ShiftGravity);
+			EventManager.onGravityShift.Unsubscribe(ReceiveShiftGravityEvent);
 		}
 
-		private void ShiftGravity()
+		private void ReceiveShiftGravityEvent()
 		{
 			GravityManager.NextGravityState();
-			
-			_grid = BoardStateManager.grid;
-			GravityStates currentGravityState = GravityManager.currentGravityState;
-			switch (currentGravityState)
+			ShiftGravity(BoardStateManager.boardState, GravityManager.currentGravityState);
+			EventManager.onApplyGravityShiftToDisplay.Invoke(_allShiftedTilesData);
+		}
+
+		public void ShiftGravity(BoardState boardState, GravityStates gravityState)
+		{
+			_grid = boardState.grid;
+			switch (gravityState)
 			{
 				case GravityStates.Right:
 					ShiftPieces(true, true);
@@ -63,9 +67,8 @@ namespace DannyG
 					ShiftPieces(false, false);
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(currentGravityState), currentGravityState, null);
+					throw new ArgumentOutOfRangeException(nameof(gravityState), gravityState, null);
 			}
-			EventManager.onApplyGravityShiftToDisplay.Invoke(_allShiftedTilesData);
 		}
 
 		private void ShiftPieces(bool inXDimension, bool inReverseLoop)
