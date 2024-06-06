@@ -17,13 +17,13 @@ namespace DannyG
 
 		private void Start()
 		{
-			EventManager.onPlacePiece.Subscribe(CheckForWinAroundPiece);
+			EventManager.onPlacePiece.Subscribe(ReceivePlacePieceEvent);
 			EventManager.onApplyGravityShiftToDisplay.Subscribe(CheckForWinOnWholeBoard);
 			CalculateMaxMoveNumber();
 		}
 		private void OnDestroy()
 		{
-			EventManager.onPlacePiece.Unsubscribe(CheckForWinAroundPiece);
+			EventManager.onPlacePiece.Unsubscribe(ReceivePlacePieceEvent);
 			EventManager.onApplyGravityShiftToDisplay.Unsubscribe(CheckForWinOnWholeBoard);
 		}
 		private void CalculateMaxMoveNumber()
@@ -49,16 +49,21 @@ namespace DannyG
 			_board = BoardStateManager.grid;
 		}
 		
-		private async void CheckForWinAroundPiece(MoveData moveData)
+		private async void ReceivePlacePieceEvent(MoveData moveData)
 		{
 			await StartOfWinCheck();
-			if (LineOfPiecesOperations.GetLongestLineOfTilesInArea(moveData.Coordinate, BoardStateManager.boardState) >= 4)
+			if (CheckForWinAroundPiece(moveData.Coordinate, BoardStateManager.boardState))
 			{
 				EventManager.onPlayerWin.Invoke(moveData.PlayerId);
 				return;
 			}
 			//Check for draw after checking for win
 			CheckForDraw();
+		}
+
+		public bool CheckForWinAroundPiece(Coordinate coordinate, BoardState boardState)
+		{
+			return LineOfPiecesOperations.GetLongestLineOfTilesInArea(coordinate, boardState) >= 4;
 		}
 		
 		private async void CheckForWinOnWholeBoard(AllShiftedTilesData allShiftedTiles)

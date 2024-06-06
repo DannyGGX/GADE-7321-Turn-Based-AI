@@ -13,6 +13,7 @@ namespace DannyG
         
         private float _maxEvaluationScore = float.MinValue;
         private float _minEvaluationScore = float.MaxValue;
+        private MoveData _currentMoveData;
 
         public Minimax(int maxDepth, ValidMovesCalculator validMovesCalculator, PlayerId maximizingPlayerId)
         {
@@ -35,9 +36,9 @@ namespace DannyG
         /// <returns> The evaluation score </returns>
         private float MiniMax(BoardState boardState, int depth, bool isMaximizingPlayer)
         {
-            if (depth == 0 || IsGameOver(boardState))
+            if (depth == 0 || IsGameOver(boardState, _currentMoveData))
             {
-                return _utilityFunction.Evaluate(boardState, isMaximizingPlayer);
+                return _utilityFunction.Evaluate(boardState, _currentMoveData, isMaximizingPlayer);
             }
             
             float currentEvaluationScore;
@@ -49,7 +50,8 @@ namespace DannyG
                 _maxEvaluationScore = float.MinValue;
                 foreach (var move in validMoves)
                 {
-                    boardState.PlacePiece(new MoveData(move, _maximizingPlayerId));
+                    _currentMoveData = new MoveData(move, _maximizingPlayerId);
+                    boardState.PlacePiece(_currentMoveData);
                     currentEvaluationScore = MiniMax(boardState, depth - 1, false);
                     _maxEvaluationScore = Max(currentEvaluationScore, _maxEvaluationScore);
                     //boardState.RemovePieceAt(move);
@@ -62,7 +64,8 @@ namespace DannyG
                 _minEvaluationScore = float.MaxValue;
                 foreach (var move in validMoves)
                 {
-                    boardState.PlacePiece(new MoveData(move, _minimizingPlayerId));
+                    _currentMoveData = new MoveData(move, _minimizingPlayerId);
+                    boardState.PlacePiece(_currentMoveData);
                     currentEvaluationScore = MiniMax(boardState, depth - 1, true);
                     _minEvaluationScore = Min(currentEvaluationScore, _minEvaluationScore);
                     //boardState.RemovePieceAt(move);
@@ -72,9 +75,12 @@ namespace DannyG
         }
 
 
-        private static bool IsGameOver(BoardState state)
+        private static bool IsGameOver(BoardState state, MoveData moveData)
         {
-            return WinChecker.Instance.WholeBoardWinCheck(state) || WinChecker.IsDrawState(state);
+            // Don't know if this other way works better or is less processing intensive
+            //return WinChecker.Instance.WholeBoardWinCheck(state) || WinChecker.IsDrawState(state);
+            
+            return WinChecker.Instance.CheckForWinAroundPiece(moveData.Coordinate, state) || WinChecker.IsDrawState(state);
         }
         
         private static float Max(float a, float b)
