@@ -44,7 +44,7 @@ namespace DannyG
 
 		private async Task StartOfWinCheck()
 		{
-			if (TurnManager.Instance.turnCount < turnCountWinCheckingThreshold) return;
+			if (IsWinCheckThresholdReached()) return;
 			await Task.Yield(); // wait for board state to update // make sure that the board display update event is sent after this method
 			_board = BoardStateManager.grid;
 		}
@@ -235,10 +235,24 @@ namespace DannyG
 			}
 		}
 
-		public static bool IsDrawState(BoardState boardState)
+		public bool IsDrawState(BoardState boardState, int currentDepth)
 		{
 			// Check if there are no empty tiles in the grid
-			return ((IList)boardState.grid).Contains((int)TileType.Empty) == false;
+			// This gives exception. IList doesn't work with 2D arrays
+			//return ((IList)boardState.grid).Contains((int)TileType.Empty) == false;
+
+			int turnCount = TurnManager.Instance.turnCount + currentDepth;
+			return turnCount == _maxMoveNumber;
+		}
+
+		private bool IsWinCheckThresholdReached()
+		{
+			return TurnManager.Instance.turnCount < turnCountWinCheckingThreshold;
+		}
+		public bool IsWinCheckThresholdReached(int currentDepth)
+		{
+			int turnCount = TurnManager.Instance.turnCount + currentDepth;
+			return turnCount < turnCountWinCheckingThreshold;
 		}
 
 	}

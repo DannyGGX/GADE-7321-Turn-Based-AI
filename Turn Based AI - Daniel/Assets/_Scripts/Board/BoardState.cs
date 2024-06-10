@@ -7,6 +7,11 @@ namespace DannyG
     public struct BoardState
     {
         public int[,] grid { get; set; }
+
+        public BoardState(BoardState boardState)
+        {
+	        this.grid = boardState.grid;
+        }
         
         public void PlacePiece(MoveData moveData)
         {

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -22,7 +23,7 @@ namespace DannyG
 		{
 			base.Initialize(id, type);
 			SetDifficultyLevel();
-			_minimax = new Minimax(_difficultyLevel.maxDepth, ValidMovesCalculator, PlayerData.PlayerId);
+			_minimax = new Minimax(_difficultyLevel.maxDepth, ValidMovesCalculator, PlayerData.PlayerId, MakeAMove);
 		}
 
 
@@ -35,7 +36,7 @@ namespace DannyG
 
 		protected override void MakeAMove(Coordinate placeToMove)
 		{
-			
+			// Don't know what to add here. Probably noop
 			base.MakeAMove(placeToMove);
 		}
 	}

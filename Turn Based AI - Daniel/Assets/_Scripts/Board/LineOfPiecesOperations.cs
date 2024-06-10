@@ -89,15 +89,15 @@ namespace DannyG
 		/// <param name="nextCoordinate"> The coordinate next to the center coordinate.
 		/// The incrementor is determined by the difference between the 2 given coordinates. </param>
 		/// <param name="boardState"></param>
+		/// <param name="targetTileType"> A different tile type than the center coordinate can be used.
+		/// If null, then it will be set to the tile type of the center coordinate. </param>
 		/// <returns> Number of same tiles in a line starting from center coordinate in the direction of the next coordinate
 		/// as well as the opposite direction.
 		/// Returns values 2 to 4 </returns>
 		public static int GetNumberOfTilesInALine(Coordinate centerCoordinate, Coordinate nextCoordinate, 
-			BoardState boardState)
+			BoardState boardState, TileType? targetTileType = null)
 		{
-			// The target tile type is set to the tile type of the next coordinate.
-			// This can be used for checking the amount of empty tiles around a placed piece.
-			TileType targetTileType = boardState.GetTileTypeAt(nextCoordinate);
+			targetTileType ??= boardState.GetTileTypeAt(centerCoordinate);
 			Incrementor2D incrementor = new Incrementor2D(centerCoordinate, nextCoordinate);
 			int numberOfSameTiles = 2;
 			Coordinate currentCoordinate = nextCoordinate;
