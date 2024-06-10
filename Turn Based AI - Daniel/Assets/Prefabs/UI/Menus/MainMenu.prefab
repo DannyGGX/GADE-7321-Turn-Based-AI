@@ -143,14 +143,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521507611140101053}
-  - component: {fileID: 30888691862130321}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &521507611140101053
 RectTransform:
   m_ObjectHideFlags: 0
@@ -171,25 +170,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &30888691862130321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1579089084212312078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d903c2d919b1d234c8bf40b083669a83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainScreen: {fileID: 7204164276533167108}
-  RacingGameModesScreen: {fileID: 0}
-  StartButton: {fileID: 239900704606742398}
-  CreditsButton: {fileID: 0}
-  OptionsButton: {fileID: 0}
-  QuitButton: {fileID: 7422643273493088809}
-  BackButton: {fileID: 0}
 --- !u!1 &3934537170138415859
 GameObject:
   m_ObjectHideFlags: 0
