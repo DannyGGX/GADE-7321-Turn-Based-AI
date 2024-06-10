@@ -165,6 +165,168 @@ namespace DannyG
 			}
 			return result;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="boardState"></param>
+		/// <param name="targetNumberOfPiecesInALine"></param>
+		/// <returns></returns>
+		public static bool CheckWholeBoardForMultipleInALine(BoardState boardState, int targetNumberOfPiecesInALine = 4)
+		{
+			int [,] board = boardState.grid;
+			int currentNumberOfPiecesInALine = 0;
+			bool isPlayer1Line = default;
+			int numberOfLinesFound = 0;
+			bool isThereAWinner = false;
+			
+			isThereAWinner = LoopHorizontally();
+			isThereAWinner = LoopVertically();
+			if (isThereAWinner) return true;
+			isThereAWinner = LoopForwardDiagonally();
+			if (isThereAWinner) return true;
+			isThereAWinner = LoopBackwardsDiagonally();
+			return isThereAWinner;
+
+			void EditNumberOfPiecesInALine(int currentX, int currentY)
+			{
+				switch (board[currentX, currentY])
+				{
+					case (int)TileType.Empty:
+					case (int)TileType.Blocker:
+						currentNumberOfPiecesInALine = 0;
+						break;
+					case (int)TileType.Player1Token:
+						if (isPlayer1Line == false || currentNumberOfPiecesInALine == 0)
+						{
+							currentNumberOfPiecesInALine = 1;
+							isPlayer1Line = true;
+						}
+						else
+							currentNumberOfPiecesInALine++;
+						break;
+					case (int)TileType.Player2Token:
+						if (isPlayer1Line || currentNumberOfPiecesInALine == 0)
+						{
+							currentNumberOfPiecesInALine = 1;
+							isPlayer1Line = false;
+						}
+						else
+							currentNumberOfPiecesInALine++;
+						break;
+				}
+			}
+
+			bool CheckForWin()
+			{
+				if (currentNumberOfPiecesInALine == 4)
+				{
+					EventManager.onPlayerWin.Invoke(isPlayer1Line ? PlayerId.Player1 : PlayerId.Player2);
+					return true;
+				}
+				return false;
+			}
+
+			bool LoopHorizontally()
+			{
+				for (int y = 0; y < board.GetLength(1); y++)
+				{
+					currentNumberOfPiecesInALine = 0;
+					for (int x = 0; x < board.GetLength(0); x++)
+					{
+						EditNumberOfPiecesInALine(x, y);
+						if (CheckForWin()) return true;
+					}
+				}
+				return false;
+			}
+
+			bool LoopVertically()
+			{
+				for (int x = 0; x < board.GetLength(0); x++)
+				{
+					currentNumberOfPiecesInALine = 0;
+					for (int y = 0; y < board.GetLength(1); y++)
+					{
+						EditNumberOfPiecesInALine(x, y);
+						if (CheckForWin()) return true;
+					}
+				}
+				return false;
+			}
+
+			bool LoopForwardDiagonally() // diagonally like a forward slash
+			{
+				int xLength = board.GetLength(0);
+				int yLength = board.GetLength(1);
+				const int cutOff = 3; // don't check diagonals that have 3 elements or less
+				
+				for (int y = cutOff; y < yLength; y++)
+				{
+					currentNumberOfPiecesInALine = 0;
+					int row = y;
+					int col = 0;
+					while (row >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return true;
+						row--;
+						col++;
+					}
+				}
+				for (int x = 1; x < xLength - cutOff; x++)
+				{
+					currentNumberOfPiecesInALine = 0;
+					int row = yLength - 1;
+					int col = x;
+					while (col < xLength)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return true;
+						row--;
+						col++;
+					}
+				}
+				return false;
+			}
+			
+			bool LoopBackwardsDiagonally() // diagonally like a back slash
+			{
+				int xLength = board.GetLength(0);
+				int yLength = board.GetLength(1);
+				const int cutOff = 3; // don't check diagonals that have 3 elements or less
+				
+				for (int y = cutOff; y < yLength; y++)
+				{
+					currentNumberOfPiecesInALine = 0;
+					int row = y;
+					int col = xLength - 1;
+					while (row >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return true;
+						row--;
+						col--;
+					}
+				}
+				for (int x = xLength - 2; x >= cutOff; x--)
+				{
+					currentNumberOfPiecesInALine = 0;
+					int row = yLength - 1;
+					int col = x;
+					while (col >= 0)
+					{
+						EditNumberOfPiecesInALine(row, col);
+						if (CheckForWin()) return true;
+						row--;
+						col--;
+					}
+				}
+				return false;
+			}
+			
+			
+		}
 		
 	}
 }

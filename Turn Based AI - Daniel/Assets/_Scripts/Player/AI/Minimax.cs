@@ -18,11 +18,15 @@ namespace DannyG
         private MoveData _currentMoveData;
         private BoardState _currentBoardState;
 
-        public Minimax(int maxDepth, ValidMovesCalculator validMovesCalculator, PlayerId maximizingPlayerId, Action<Coordinate> moveCallback)
+        public Minimax(DifficultyLevel difficultyLevel, ValidMovesCalculator validMovesCalculator, PlayerId maximizingPlayerId, Action<Coordinate> moveCallback)
         {
-            _maxDepth = maxDepth;
+            _maxDepth = difficultyLevel.maxDepth;
             _validMovesCalculator = validMovesCalculator;
-            _utilityFunction = new UtilityFunction();
+            _utilityFunction = new UtilityFunction
+            (
+                difficultyLevel.hasCheckForMultipleLinesOf3, 
+                difficultyLevel.hasCountNumberOfConnect4Possibilities
+            );
             this._maximizingPlayerId = maximizingPlayerId;
             this._minimizingPlayerId = maximizingPlayerId == PlayerId.Player1 ? PlayerId.Player2 : PlayerId.Player1;
             _moveCallback = moveCallback;

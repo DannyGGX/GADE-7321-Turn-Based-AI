@@ -5,7 +5,7 @@ namespace DannyG
     public class UtilityFunction
     {
 
-        public UtilityFunction()
+        public UtilityFunction(bool hasCheckForMultipleLinesOf3, bool hasCountNumberOfConnect4Possibilities)
         {
             
         }

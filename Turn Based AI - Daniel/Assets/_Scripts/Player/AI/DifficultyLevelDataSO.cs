@@ -23,8 +23,8 @@ namespace DannyG
         
         [FormerlySerializedAs("searchDepth")] [Min(1)] public int maxDepth;
         
-        [Header("Utility Function Variables")]
-        public bool hasCountNumberOf3Connected;
+        [FormerlySerializedAs("hasCountNumberOf3Connected")] [Header("Utility Function Variables")]
+        public bool hasCheckForMultipleLinesOf3;
         public bool hasCountNumberOfConnect4Possibilities;
     }
     

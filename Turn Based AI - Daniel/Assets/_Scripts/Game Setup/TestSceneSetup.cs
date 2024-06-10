@@ -16,10 +16,10 @@ namespace DannyG
 		{
 			GameSetupDataSO gameSetupData = Resources.Load<GameSetupDataSO>("Game Setup Data");
 
-			gameSetupData.ChosenMapIndex = 3;
+			gameSetupData.ChosenMapIndex = 1;
 			gameSetupData.startingPlayer = PlayerId.Player1;
 			gameSetupData.player1Type = PlayerType.Human;
-			gameSetupData.player2Type = PlayerType.Ai;
+			gameSetupData.player2Type = PlayerType.Human;
 		}
 	}
 }
